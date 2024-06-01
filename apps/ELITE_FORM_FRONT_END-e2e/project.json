@@ -1,0 +1,10 @@
+{
+  "name": "ELITE_FORM_FRONT_END-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/ELITE_FORM_FRONT_END-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["ELITE_FORM_FRONT_END"],
+  "// targets": "to see all targets run: nx show project ELITE_FORM_FRONT_END-e2e --web",
+  "targets": {}
+}

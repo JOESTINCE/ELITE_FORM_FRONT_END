@@ -1,0 +1,90 @@
+{
+  "name": "ELITE_FORM_FRONT_END",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/ELITE_FORM_FRONT_END/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ELITE_FORM_FRONT_END",
+        "index": "apps/ELITE_FORM_FRONT_END/src/index.html",
+        "browser": "apps/ELITE_FORM_FRONT_END/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/ELITE_FORM_FRONT_END/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/ELITE_FORM_FRONT_END/public"
+          }
+        ],
+        "styles": ["apps/ELITE_FORM_FRONT_END/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ELITE_FORM_FRONT_END:build:production"
+        },
+        "development": {
+          "buildTarget": "ELITE_FORM_FRONT_END:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "ELITE_FORM_FRONT_END:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/ELITE_FORM_FRONT_END/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "ELITE_FORM_FRONT_END:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/ELITE_FORM_FRONT_END/browser",
+        "spa": true
+      }
+    }
+  }
+}
