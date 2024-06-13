@@ -9,7 +9,10 @@ import {ChangeDetectorRef, OnDestroy} from '@angular/core';
 export class NavBarComponent implements OnDestroy{
   mobileQuery: MediaQueryList;
 
-  fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
+  fillerNav = [
+    { title:'Dashboard', url:'/app' },
+    { title: 'Forms', url: '/app/addeditform' },
+  ];
 
 
 

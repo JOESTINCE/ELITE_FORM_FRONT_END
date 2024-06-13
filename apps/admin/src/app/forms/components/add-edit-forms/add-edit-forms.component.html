@@ -8,8 +8,18 @@
         <input matInput placeholder="Enter your description">
       </mat-form-field>
     </mat-card>
+    <div *ngFor="let info of form.get('items').controls">
+        <mat-card class="form-title-card">
+          <mat-form-field style="font-size: 35px">
+            <input matInput placeholder="Untitled form">
+          </mat-form-field>
+          <mat-form-field style="font-size: 15px; margin: 0px;">
+            <input matInput placeholder="Enter your description">
+          </mat-form-field>
+        </mat-card>
+     </div>
   </form>
-  <mat-icon class="add-form">
+  <mat-icon class="add-form" (click)="onFormAddition()">
     add_circle
   </mat-icon>
 </mat-card>
