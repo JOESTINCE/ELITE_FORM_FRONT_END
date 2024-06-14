@@ -8,11 +8,20 @@
         <input matInput placeholder="Enter your description">
       </mat-form-field>
     </mat-card>
-    <div *ngFor="let info of form.get('items').controls">
+    <div *ngFor="let info of form.get('items').controls" style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
         <mat-card class="form-title-card">
-          <mat-form-field style="font-size: 35px">
-            <input matInput placeholder="Untitled form">
+          <div class="question-row">
+          <mat-form-field style="font-size: 25px; width:75%">
+            <textarea matInput placeholder="Enter your question here..."></textarea>
           </mat-form-field>
+          <mat-form-field style="font-size: 25px; width:25%">
+            <mat-select >
+              @for (food of foods; track food) {
+                <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
           <mat-form-field style="font-size: 15px; margin: 0px;">
             <input matInput placeholder="Enter your description">
           </mat-form-field>

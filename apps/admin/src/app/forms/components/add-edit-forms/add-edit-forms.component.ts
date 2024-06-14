@@ -9,6 +9,11 @@ import { FormArray, FormGroup, UntypedFormArray, UntypedFormControl, UntypedForm
 
 export class AddEditFormsComponent {
   form: any;
+  foods: any[] = [
+    {value: 'Radio', viewValue: 'Radio'},
+    {value: 'Select', viewValue: 'Select'},
+    {value: 'Text box', viewValue: 'Text box'},
+  ];
   constructor(
     // private formGroup: FormGroup
   ){

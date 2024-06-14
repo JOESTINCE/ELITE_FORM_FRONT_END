@@ -12,6 +12,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
+
 
 
 @NgModule({
@@ -28,7 +30,8 @@ import { MatCardModule } from '@angular/material/card';
     MatSidenavModule, 
     MatListModule,
     MatSidenavContent,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule
   ],
   exports:[
     CommonModule,
@@ -42,7 +45,8 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule, 
     MatSidenavModule, 
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatSelectModule
   ]
 })
 export class CommonMatModuleModule { }
