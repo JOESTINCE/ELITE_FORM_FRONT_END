@@ -8,23 +8,32 @@
         <input matInput placeholder="Enter your description">
       </mat-form-field>
     </mat-card>
-    <div *ngFor="let info of form.get('items').controls" style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
+    <div *ngFor="let info of form.get('items').controls; let index = index" style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
         <mat-card class="form-title-card">
           <div class="question-row">
           <mat-form-field style="font-size: 25px; width:75%">
             <textarea matInput placeholder="Enter your question here..."></textarea>
           </mat-form-field>
           <mat-form-field style="font-size: 25px; width:25%">
-            <mat-select >
+            <mat-select placeholder="answer type...">
               @for (food of foods; track food) {
                 <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
         </div>
-          <mat-form-field style="font-size: 15px; margin: 0px;">
-            <input matInput placeholder="Enter your description">
+        <div class="answer-row">
+          <mat-form-field style="font-size: 15px; margin: 0px; min-width: 73%">
+            <input matInput placeholder="Enter your answer..">
           </mat-form-field>
+          <mat-icon style="cursor: pointer;">
+           add_circle
+          </mat-icon>
+        </div>
+          <hr style="border: 1px solid #b0b0b08f; width: 100%;">
+        <div style="display: flex;align-items: end;justify-content: end;">
+          <mat-icon (click)="onFormDeletion(index)"style="cursor: pointer;">delete</mat-icon>
+        </div>
         </mat-card>
      </div>
   </form>

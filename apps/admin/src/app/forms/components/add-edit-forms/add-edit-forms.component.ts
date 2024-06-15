@@ -31,4 +31,10 @@ export class AddEditFormsComponent {
         question: new UntypedFormControl(null)
       }))
     }
+    onFormDeletion(index: number){
+      if(index >=0){
+        (this.form.get('items') as UntypedFormArray).removeAt(index);
+      }
+      console.log(index);
+    }
 }
