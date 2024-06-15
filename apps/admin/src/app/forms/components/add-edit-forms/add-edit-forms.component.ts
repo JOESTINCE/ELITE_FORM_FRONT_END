@@ -28,13 +28,28 @@ export class AddEditFormsComponent {
     };
     onFormAddition(){
       (this.form.get('items') as UntypedFormArray).push(new UntypedFormGroup({
-        question: new UntypedFormControl(null)
+        question: new UntypedFormControl(null),
+        answer: new FormArray([]),
       }))
     }
     onFormDeletion(index: number){
       if(index >=0){
         (this.form.get('items') as UntypedFormArray).removeAt(index);
       }
-      console.log(index);
+    }
+    onAnswerAddition(index: number){
+      (this.form.get('items').controls).forEach((item: any, formIndex: number)=>{
+        if(formIndex == index){
+          if(item?.controls?.answer){
+            item.controls.answer.controls.push({
+              answer: new UntypedFormControl(null)
+            })
+            console.log(item.controls.answer);
+            
+          }
+        }
+          
+
+      })
     }
 }

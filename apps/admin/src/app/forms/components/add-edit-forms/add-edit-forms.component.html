@@ -22,14 +22,15 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="answer-row">
+        <div *ngFor = "let answer of info?.controls?.answer?.controls"class="answer-row">
           <mat-form-field style="font-size: 15px; margin: 0px; min-width: 73%">
             <input matInput placeholder="Enter your answer..">
           </mat-form-field>
-          <mat-icon style="cursor: pointer;">
-           add_circle
-          </mat-icon>
+          
         </div>
+        <mat-icon style="cursor: pointer;" (click)="onAnswerAddition(index)">
+          add_circle
+         </mat-icon>
           <hr style="border: 1px solid #b0b0b08f; width: 100%;">
         <div style="display: flex;align-items: end;justify-content: end;">
           <mat-icon (click)="onFormDeletion(index)"style="cursor: pointer;">delete</mat-icon>
