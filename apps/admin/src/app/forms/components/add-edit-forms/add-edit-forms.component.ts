@@ -43,9 +43,18 @@ export class AddEditFormsComponent {
           if(item?.controls?.answer){
             item.controls.answer.controls.push({
               answer: new UntypedFormControl(null)
-            })
-            console.log(item.controls.answer);
-            
+            })            
+          }
+        }
+          
+
+      })
+    }
+    onDeleteAnswer(index: number, answerIndex: number){
+      (this.form.get('items').controls).forEach((item: any, formIndex: number)=>{
+        if(formIndex == index){
+          if(item?.controls?.answer){
+            item.controls.answer.controls.splice(answerIndex,1)
           }
         }
           

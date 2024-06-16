@@ -39,6 +39,17 @@
 .answer-row{
   display: flex;
   flex-direction:row;
-  gap: 13%;
-  min-width: 100%;
+  min-width: 73%;
+  gap: 3%;
 }
+/* Angular 15 adds grey background on mat form components */
+/* below removes that background color */
+/* Manipulate initial background color*/
+// .mat-mdc-text-field-wrapper {
+//   background-color: white !important;
+//   border-bottom: none !important;
+// }
+
+// .mat-mdc-form-field-focus-overlay {
+// background-color: white !important;
+// }
