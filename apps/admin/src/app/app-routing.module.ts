@@ -4,6 +4,7 @@ import { AddEditFormsComponent } from './forms/components/add-edit-forms/add-edi
 import { NavBarComponent } from './nav-bar/components/nav-bar/nav-bar.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'app', pathMatch: 'full' },
   {path:'app', component: NavBarComponent, children:[
     { path: 'addeditform', component: AddEditFormsComponent },
   ]}

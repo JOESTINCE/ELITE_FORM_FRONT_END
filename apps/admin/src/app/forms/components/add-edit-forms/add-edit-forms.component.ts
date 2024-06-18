@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormGroup, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-edit-forms',
@@ -9,56 +9,69 @@ import { FormArray, FormGroup, UntypedFormArray, UntypedFormControl, UntypedForm
 
 export class AddEditFormsComponent {
   form: any;
-  foods: any[] = [
-    {value: 'Radio', viewValue: 'Radio'},
-    {value: 'Select', viewValue: 'Select'},
-    {value: 'Text box', viewValue: 'Text box'},
+  answerType: any[] = [
+    { value: 'radio', viewValue: 'Radio' },
+    { value: 'select', viewValue: 'Select' },
+    { value: 'textBox', viewValue: 'Text box' },
   ];
   constructor(
-    // private formGroup: FormGroup
-  ){
-    
+  ) {
+
+  }
+  ngOnInit() {
+    this.form = new FormGroup({
+      title: new UntypedFormControl(null),
+      description: new UntypedFormControl(null),
+      items: new FormArray([])
+    });
+  };
+  onFormAddition() {
+    (this.form.get('items') as FormArray).push(new FormGroup({
+      question: new FormControl(null),
+      answerType: new FormControl(null),
+      answer: new FormArray([]),
+    }))
+  }
+  onFormDeletion(index: number) {
+    if (index >= 0) {
+      (this.form.get('items') as UntypedFormArray).removeAt(index);
     }
-    ngOnInit(){
-      this.form = new FormGroup({
-        title: new UntypedFormControl(null),
-        description: new UntypedFormControl(null),
-        items: new FormArray([])
-      });
-    };
-    onFormAddition(){
-      (this.form.get('items') as UntypedFormArray).push(new UntypedFormGroup({
-        question: new UntypedFormControl(null),
-        answer: new FormArray([]),
-      }))
-    }
-    onFormDeletion(index: number){
-      if(index >=0){
-        (this.form.get('items') as UntypedFormArray).removeAt(index);
+  }
+  onAnswerAddition(index: number) {
+    const answers = this.getAnswersArray(index);
+    answers.push(new FormControl(null, Validators.required));
+
+  }
+  onDeleteAnswer(index: number, answerIndex: number) {
+    (this.form.get('items').controls).forEach((item: any, formIndex: number) => {
+      if (formIndex == index) {
+        if (item?.controls?.answer) {
+          item.controls.answer.controls.splice(answerIndex, 1)
+        }
+      }
+
+    })
+  }
+  get items(): FormArray {
+    return this.form.get('items') as FormArray;
+  }
+  onAnswerTypeChange(index: number) {
+    if (index >= 0) {
+      const answerTypeControl = this.items.at(index).get('answerType');
+      const answers = this.getAnswersArray(index);
+      if (answerTypeControl && answerTypeControl.value === 'textBox') {
+        if (answers.length) {
+         answers.clear();
+        } 
+      }
+      if (answers.length == 0) {
+      answers.push(new FormControl(null, Validators.required));
       }
     }
-    onAnswerAddition(index: number){
-      (this.form.get('items').controls).forEach((item: any, formIndex: number)=>{
-        if(formIndex == index){
-          if(item?.controls?.answer){
-            item.controls.answer.controls.push({
-              answer: new UntypedFormControl(null)
-            })            
-          }
-        }
-          
+  }
 
-      })
-    }
-    onDeleteAnswer(index: number, answerIndex: number){
-      (this.form.get('items').controls).forEach((item: any, formIndex: number)=>{
-        if(formIndex == index){
-          if(item?.controls?.answer){
-            item.controls.answer.controls.splice(answerIndex,1)
-          }
-        }
-          
+  private getAnswersArray(index: number): FormArray {
+    return this.items.at(index).get('answer') as FormArray;
+  }
 
-      })
-    }
 }

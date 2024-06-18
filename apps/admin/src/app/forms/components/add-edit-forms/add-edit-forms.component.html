@@ -1,23 +1,25 @@
 <mat-card class="page-container">
-  <form class=add-edit-form>
+  <form class=add-edit-form [formGroup]="form">
     <mat-card class="form-title-card">
       <mat-form-field style="font-size: 35px">
-        <input matInput placeholder="Untitled form">
+        <input matInput formControlName="title" placeholder="Untitled form">
       </mat-form-field>
       <mat-form-field style="font-size: 15px; margin: 0px;">
-        <input matInput placeholder="Enter your description">
+        <input matInput formControlName="description" placeholder="Enter your description">
       </mat-form-field>
     </mat-card>
+    <div formArrayName='items' style="min-width: 100%;">
     <div *ngFor="let info of form.get('items').controls; let index = index" style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
-        <mat-card class="form-title-card">
+      <div [formGroupName]="index" style="min-width: 100%;display: flex;justify-content: center;"> 
+      <mat-card class="form-title-card">
           <div class="question-row">
           <mat-form-field style="font-size: 25px; width:75%">
             <textarea matInput placeholder="Enter your question here..."></textarea>
           </mat-form-field>
           <mat-form-field style="font-size: 25px; width:25%">
-            <mat-select placeholder="answer type...">
-              @for (food of foods; track food) {
-                <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+            <mat-select formControlName="answerType" placeholder="answer type..." (selectionChange)="onAnswerTypeChange(index);">
+              @for (data of answerType; track data) {
+                <mat-option  [value]="data.value">{{data.viewValue}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -27,13 +29,13 @@
             <input matInput placeholder="Enter your answer..">
           </mat-form-field >
           <div style="display: flex;align-items: flex-start;justify-content: start;min-width: 27%;">
-          <mat-icon style="cursor: pointer; " (click)="onDeleteAnswer(index, answerIndex)" >
+          <mat-icon *ngIf="info?.get('answerType')?.value !== 'textBox'" style="cursor: pointer; " (click)="onDeleteAnswer(index, answerIndex)" >
             delete
            </mat-icon>
           </div>
         </div>
         <div style="display: flex;align-items: center;justify-content: center;width: 73%;">
-        <mat-icon style="cursor: pointer;" (click)="onAnswerAddition(index)">
+        <mat-icon *ngIf="info?.get('answerType')?.value && info?.get('answerType')?.value !== 'textBox'" style="cursor: pointer;" (click)="onAnswerAddition(index)">
           add_circle
          </mat-icon>
         </div>
@@ -42,7 +44,9 @@
           <mat-icon (click)="onFormDeletion(index)"style="cursor: pointer;">delete</mat-icon>
         </div>
         </mat-card>
+        </div>
      </div>
+    </div>
   </form>
   <mat-icon class="add-form" (click)="onFormAddition()">
     add_circle

@@ -1,13 +1,16 @@
     <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-      <mat-toolbar style="box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.1)!important;background-color: red;" class="example-toolbar tool-bar">
-        <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-        <h1 class="example-app-name">Responsive App</h1>
-      </mat-toolbar>
   
       <mat-sidenav-container class="example-sidenav-container"
-                            [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-        <mat-sidenav #snav style="min-width: 224px;" [mode]="mobileQuery.matches ? 'over' : 'side'"
+                            [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
+        <mat-sidenav #snav style=" background-image: linear-gradient(rgb(255, 0, 0), rgb(255, 223, 223));min-width: 224px;" [mode]="mobileQuery.matches ? 'over' : 'side'"
                     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+          <div style="display: flex;min-height: 22%;border-bottom: 5px solid rgb(255, 255, 255);">
+            <div style="padding: 25px;min-width: 78%;min-height: 100%;">
+              <div style="min-width:100%; min-height: 100%;">
+
+              </div>
+            </div>
+          </div>
           <mat-nav-list>
             @for (nav of fillerNav; track nav) {
               <a mat-list-item [routerLink]="nav?.url">{{nav?.title}}</a>
@@ -15,8 +18,45 @@
           </mat-nav-list>
         </mat-sidenav>
   
-        <mat-sidenav-content style="background-color: #f5f5f5;">
+        <!-- <mat-sidenav-content style="background-color: #f5f5f5;">
           <router-outlet></router-outlet>
+        </mat-sidenav-content> -->
+        <mat-sidenav-content>
+          <mat-toolbar style="position: absolute; top: 0px; box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.1)!important;background-color: white;"
+            class="example-toolbar tool-bar">
+            <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+            <h1 class="example-app-name">Responsive App</h1>
+          </mat-toolbar>
+          <!-- <p><button mat-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button></p> -->
+          <router-outlet></router-outlet>
+
+          <!-- <p>Events:</p>
+          <div class="example-events">
+            @for (e of events; track e) {
+            <div>{{e}}</div>
+            }
+          </div> -->
         </mat-sidenav-content>
       </mat-sidenav-container>
     </div>
+    <!-- @if (shouldRun) {
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+        (closed)="events.push('close!')">
+        Sidenav content
+      </mat-sidenav>
+    
+      <mat-sidenav-content>
+        <p><mat-checkbox [(ngModel)]="opened">sidenav.opened</mat-checkbox></p>
+        <p><button mat-button (click)="sidenav.toggle()">sidenav.toggle()</button></p>
+        <p>Events:</p>
+        <div class="example-events">
+          @for (e of events; track e) {
+          <div>{{e}}</div>
+          }
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+    } @else {
+    <div>Please open on Stackblitz to see result</div>
+    } -->
