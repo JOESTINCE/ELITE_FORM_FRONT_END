@@ -1,5 +1,6 @@
 <mat-card class="page-container">
   <form class=add-edit-form [formGroup]="form">
+    <div style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
     <mat-card class="form-title-card">
       <mat-form-field style="font-size: 35px">
         <input matInput formControlName="title" placeholder="Untitled form">
@@ -8,6 +9,7 @@
         <input matInput formControlName="description" placeholder="Enter your description">
       </mat-form-field>
     </mat-card>
+    </div>
     <div formArrayName='items' style="min-width: 100%;">
     <div *ngFor="let info of form.get('items').controls; let index = index" style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
       <div [formGroupName]="index" style="min-width: 100%;display: flex;justify-content: center;"> 
