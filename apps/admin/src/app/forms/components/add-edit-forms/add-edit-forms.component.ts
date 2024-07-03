@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-forms',
@@ -14,7 +16,14 @@ export class AddEditFormsComponent {
     { value: 'select', viewValue: 'Select' },
     { value: 'textBox', viewValue: 'Text box' },
   ];
+  heading: string = 'Create Forms';
+  buttonDetails : Array<{text: string}> = [
+    {text: 'cancel'},
+    { text: 'save' },
+  ]
   constructor(
+    private router: Router,
+    private location: Location
   ) {
 
   }
@@ -69,7 +78,14 @@ export class AddEditFormsComponent {
       }
     }
   }
-
+  onButtonClick(event: any){
+    if(event == 'cancel'){
+      this.location.back();
+    }
+    else if (event == 'save'){
+      console.log(this.form)
+    }
+  }
   private getAnswersArray(index: number): FormArray {
     return this.items.at(index).get('answer') as FormArray;
   }

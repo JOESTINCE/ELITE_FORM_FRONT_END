@@ -1,0 +1,14 @@
+  <div style="width: 95%">
+  <div style="width: 95%; padding: 30px 40px 0px 40px;">
+    <div style="display: flex; flex-direction: row; min-width: 95%">
+    <div style="font-size: 29px; font-weight:400; min-width: 50%">
+      {{heading}}
+    </div>
+    <div style="min-width: 50%;display: flex; place-content: center flex-end;">
+    <div *ngFor = "let item of buttonDetails" >
+      <button mat-flat-button style="background-color: rgb(255, 0, 0); color: white; margin-left: 10px;" (click) = "buttonClicked(item?.text)">{{item?.text}}</button>
+    </div>
+    </div>
+    </div>
+  </div>
+  </div>

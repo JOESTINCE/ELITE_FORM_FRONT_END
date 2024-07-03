@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { CommonHeaderComponent } from './components/common-header/common-header.component';
+import { CommonTableComponent } from './components/common-table/common-table.component';
 import { CommonMatModuleModule } from '../common-mat-module/common-mat-module.module';
-import { CommonHeaderComponent } from './common-components/common-header/common-header.component';
 
 
 
 @NgModule({
   declarations: [
-    NavBarComponent,
-    CommonHeaderComponent
+    CommonHeaderComponent,
+    CommonTableComponent
   ],
   imports: [
     CommonModule,
     CommonMatModuleModule
   ]
 })
-export class NavBarModule { }
+export class CommonComponentsModule { }

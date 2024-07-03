@@ -2,7 +2,9 @@
   "name": "@elite-form-front-end/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "admin": "node --max_old_space_size=8192 ./apps/admin ng serve admin --port 4200"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~18.0.0",
