@@ -11,7 +11,7 @@ export class NavBarComponent implements OnDestroy{
 
   fillerNav = [
     { title:'Dashboard', url:'/app' },
-    { title: 'Forms', url: '/app/addeditform' },
+    { title: 'Forms', url: '/app/formlist' },
   ];
 
 

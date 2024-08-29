@@ -13,7 +13,8 @@ import { CommonMatModuleModule } from '../common-mat-module/common-mat-module.mo
   ],
   imports: [
     CommonModule,
-    CommonMatModuleModule
+    CommonMatModuleModule,
+    
   ]
 })
 export class CommonComponentsModule { }

@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -31,7 +32,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatListModule,
     MatSidenavContent,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule
   ],
   exports:[
     CommonModule,
@@ -46,7 +48,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatSidenavModule, 
     MatListModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    MatPaginatorModule
   ]
 })
 export class CommonMatModuleModule { }

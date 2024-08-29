@@ -2,7 +2,7 @@
   
       <mat-sidenav-container class="example-sidenav-container"
                             [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
-        <mat-sidenav #snav style=" background-image: linear-gradient(rgb(255, 0, 0), rgb(255, 223, 223));min-width: 224px;" [mode]="mobileQuery.matches ? 'over' : 'side'"
+        <mat-sidenav #snav style=" background-image: linear-gradient(var(--primary-theme-color), rgb(255, 223, 223));min-width: 224px;" [mode]="mobileQuery.matches ? 'over' : 'side'"
                     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
           <div style="display: flex;min-height: 22%;border-bottom: 5px solid rgb(255, 255, 255);">
             <div style="padding: 25px;min-width: 76%;min-height: 100%;">

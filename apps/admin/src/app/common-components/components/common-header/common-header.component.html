@@ -6,7 +6,7 @@
     </div>
     <div style="min-width: 50%;display: flex; place-content: center flex-end;">
     <div *ngFor = "let item of buttonDetails" >
-      <button mat-flat-button style="background-color: rgb(255, 0, 0); color: white; margin-left: 10px;" (click) = "buttonClicked(item?.text)">{{item?.text}}</button>
+      <button mat-flat-button style="background-color: var(--primary-theme-color); color: white; margin-left: 10px;" (click) = "buttonClicked(item?.text)">{{item?.text}}</button>
     </div>
     </div>
     </div>

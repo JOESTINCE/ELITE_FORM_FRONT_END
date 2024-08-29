@@ -1,1 +1,17 @@
-<p>common-table works!</p>
+<mat-card style="padding: 20px; min-height: 75%; width: auto;margin:20px;box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);">
+  @for(rows of tableData; track rows){
+  <mat-card
+    [ngClass]="rows && rows[0] && rows[0]?.isHeader ? 'tableRowHeader' : 'tableRowData'">
+    @for(columns of rows; track columns){
+      <!-- @if(columns?.isHeader){ -->
+            <div [ngClass] = "columns?.isHeader ? 'headerContents' : 'dataContents'">{{columns?.value}}</div>
+      <!-- } -->
+      <!-- @if(!columns?.isHeader){
+        <div style="color: black;font-size: 16px;font-weight: 500;padding: 5px;">{{columns?.value}}</div>
+      } -->
+    }
+  </mat-card>
+  }
+  <mat-paginator class="paginator" [length]="tableCount" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]" aria-label="Select page" (page)="onPageChanged($event)">
+  </mat-paginator>
+</mat-card>

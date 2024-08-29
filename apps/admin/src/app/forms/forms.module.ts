@@ -10,12 +10,12 @@ import { CommonComponentsModule } from '../common-components/common-components.m
 @NgModule({
   declarations: [
     AddEditFormsComponent,
-    FormsListComponent
+    FormsListComponent,
   ],
   imports: [
     CommonModule,
     CommonMatModuleModule,
-    CommonComponentsModule
+    CommonComponentsModule,
   ]
 })
 export class FormsModule { }

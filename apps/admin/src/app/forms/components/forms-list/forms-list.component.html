@@ -1,1 +1,29 @@
-<p>forms-list works!</p>
+<app-common-header [heading]="heading" [buttonDetails]="buttonDetails"
+  (onButtonClick)='onButtonClick($event)'></app-common-header>
+<mat-card class="pageContainer">
+  @for(rows of columnData?.rows; track rows){
+  <mat-card class="detailsCard">
+    <div class="detailsParentDiv">
+      <div class="imageDiv">
+        <img class="formImage" src="https://cdn-icons-png.flaticon.com/512/671/671808.png" alt="">
+      </div>
+      <div class="detailsDiv">
+        <h2>{{rows?.formName}}</h2>
+        <h4 class="formDescription">{{rows?.formDescription}} </h4>
+        <div class="formIcons">
+          <mat-icon class="editIcon">edit</mat-icon>
+          <mat-icon class="deleteIcon">delete</mat-icon>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  }
+
+  <mat-paginator #paginator class="paginator" (page)="handlePageEvent($event)" [length]="limit"
+    [pageSize]="columnData?.count" [disabled]="disabled" [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize" [pageIndex]="offset"
+    aria-label="Select page">
+  </mat-paginator>
+
+
+</mat-card>

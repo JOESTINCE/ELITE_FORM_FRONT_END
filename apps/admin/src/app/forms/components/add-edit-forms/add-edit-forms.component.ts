@@ -83,7 +83,7 @@ export class AddEditFormsComponent {
       this.location.back();
     }
     else if (event == 'save'){
-      console.log(this.form)
+      console.log(this.form.value)
     }
   }
   private getAnswersArray(index: number): FormArray {

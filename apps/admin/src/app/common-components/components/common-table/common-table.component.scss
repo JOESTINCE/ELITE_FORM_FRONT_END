@@ -1,0 +1,38 @@
+.tableRowHeader{
+    display: flex;
+    align-items: center;
+    place-content: center space-evenly;
+    flex-direction: row;
+    padding: 12px 0px;
+    margin: 6px 0px 0px;
+    font-size: 16px;
+    box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tableRowData{
+    display: flex;
+    align-items: center;
+    place-content: center space-evenly;
+    flex-direction: row;
+    padding: 12px 0px;
+    margin: 6px 0px 0px;
+    font-size: 16px;
+    border-left: 5px solid var(--tertiary-theme-color);
+    box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+}
+.headerContents{
+  color: var(--tertiary-theme-color);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 5px;
+}
+.dataContents{
+  color: black;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px;
+}
+.paginator{
+  box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1)!important;
+  margin: 6px 0px 0px;
+}
