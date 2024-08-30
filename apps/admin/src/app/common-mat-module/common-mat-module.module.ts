@@ -14,9 +14,8 @@ import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
-
-
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @NgModule({
   declarations: [],
   imports: [
@@ -33,7 +32,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSidenavContent,
     MatCardModule,
     MatSelectModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatRadioModule,
+    MatCheckboxModule
   ],
   exports:[
     CommonModule,
@@ -49,7 +50,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatListModule,
     MatCardModule,
     MatSelectModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatRadioModule,
+    MatCheckboxModule
   ]
 })
 export class CommonMatModuleModule { }

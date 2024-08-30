@@ -13,7 +13,7 @@ export class AddEditFormsComponent {
   form: any;
   answerType: any[] = [
     { value: 'radio', viewValue: 'Radio' },
-    { value: 'select', viewValue: 'Select' },
+    { value: 'checkBox', viewValue: 'checkBox' },
     { value: 'textBox', viewValue: 'Text box' },
   ];
   heading: string = 'Create Forms';
@@ -48,7 +48,9 @@ export class AddEditFormsComponent {
   }
   onAnswerAddition(index: number) {
     const answers = this.getAnswersArray(index);
-    answers.push(new FormControl(null, Validators.required));
+    answers.push(new FormGroup({
+      answerDetails: new FormControl(null)
+    }));
 
   }
   onDeleteAnswer(index: number, answerIndex: number) {
@@ -74,7 +76,9 @@ export class AddEditFormsComponent {
         } 
       }
       if (answers.length == 0) {
-      answers.push(new FormControl(null, Validators.required));
+        answers.push(new FormGroup({
+          answerDetails: new FormControl(null)
+        }));
       }
     }
   }
