@@ -1,53 +1,63 @@
-
 <div style="padding: 30px;">
-<mat-card
-  style="width: auto; min-height: 85%;  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);display: flex;align-items: center;justify-content: center;">
   <mat-card
-    style="box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);min-width: 75%; margin: 20px;display: flex;align-items: center;justify-content: center;flex-direction: column; border-left: 5px solid var(--primary-theme-color);">
-    <div style="padding: 22px 20px 15px 20px;">
-      <h1 style="margin: 0px;font-size: 35px;">{{formData.title}}</h1>
-    </div>
-    <hr style="color: grey;width: 75%;">
-    <div style="padding: 15px 20px 25px 20px;">
-      <h3 style="margin: 0px;font-size: 25px">{{formData.description}}</h3>
+    style="width: auto; min-height: 85%;  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);display: flex;align-items: center;justify-content: center;">
+    <mat-card
+      style="box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);min-width: 75%; margin: 20px;display: flex;align-items: center;justify-content: center;flex-direction: column; border-left: 5px solid var(--primary-theme-color);">
+      <div style="padding: 22px 20px 15px 20px;">
+        <h1 style="margin: 0px;font-size: 35px;">{{formData.title}}</h1>
+      </div>
+      <hr style="color: grey;width: 75%;">
+      <div style="padding: 15px 20px 25px 20px;">
+        <h3 style="margin: 0px;font-size: 25px">{{formData.description}}</h3>
+      </div>
+    </mat-card>
+    <form [formGroup]="form" style="width: 100%;">
+       <div formArrayName="items" style="display: flex;align-items: center;justify-content: center;flex-direction: column;min-width: 100%;">
+      <!-- @if(form?.get('items')?.value?.length === formData.items.length){ -->
+      <div *ngFor="let formData of form.get('items').controls; let index = index" [formGroupName]="index" style="display: flex;align-items: center;justify-content: center;flex-direction: column; width: 75%;">
+        <!-- @for(formData of form?.get('items')?.value; track formData; let index = $index){ -->
+        <!-- <div [formGroupName]="index"> -->
+          <mat-card
+            style="padding:20px 15px;box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);width: 100%; margin: 20px;display: flex;align-items: start;justify-content: start;flex-direction: column; border-left: 5px solid var(--primary-theme-color); word-break: break-word;">
+            <div>
+              <h4 style="font-size:20px; margin-left: 30px;">{{formData.get('question').value}}</h4>
+            </div>
+            <!-- <hr style="color: grey;width: 75%;"> -->
+            @if(formData.get('answerType').value === 'textBox'){
+            <div style="display: flex;align-items: center;justify-content: start;min-width: 90%;margin: 15px 30px;">
+              <mat-form-field style="font-size: 20px; width:75% ;box-shadow:  1px 0px px 0px rgba(0, 0, 0, 0.1)">
+                <textarea matInput placeholder="Enter your answer here..." formControlName="userAnswer"></textarea>
+              </mat-form-field>
+            </div>
+            }
+            @if(formData.get('answerType').value === 'radio' && formData.get('options').length){
+            <mat-radio-group formControlName="userAnswer"
+              style="display: flex;flex-direction: column; align-items: flex-start;min-width: 90%;margin: 5px 30px;">
+              @for (answers of formData.get('options').controls; track answers) {
+              <mat-radio-button [value]="answers.get('option').value">{{answers.get('option').value}}</mat-radio-button>
+              }
+            </mat-radio-group>
+            }
+            @if(formData.get('answerType').value === 'checkBox' && formData.get('options').length){
+            <div style="display: flex;flex-direction: column; align-items: flex-start;min-width: 90%;margin: 5px 30px;" formArrayName="options">
+              <!-- @for (answers of formData.get('options').controls; track answers) { -->
+               <div *ngFor = "let answers of formData.get('options').controls; let i=index"[formGroupName]="i">
+              <mat-checkbox formControlName="option"  (change)="ohCheckBoxChange($event.checked, index, i)">{{answers.get('value').value}}</mat-checkbox>
+              </div>
+              <!-- } -->
+            </div>
+            }
+          </mat-card>
+          <!-- </div>
+        } -->
+        </div>
+        <!-- } -->
+      </div>
+    </form>
+    <div style="display: flex;align-items: center;justify-content: end;min-width: 75%;margin: 5px 30px 15px 30px;">
+      <button mat-flat-button style="background-color: var(--primary-theme-color); color: white;"(click)="onFormSubmit();">
+        submit
+      </button>
     </div>
   </mat-card>
-  @for(questions of formData.items; track questions){
-  <mat-card
-    style="padding:20px 15px;box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);width: 75%; margin: 20px;display: flex;align-items: start;justify-content: start;flex-direction: column; border-left: 5px solid var(--primary-theme-color); word-break: break-word;">
-    <div>
-      <h4 style="font-size:20px; margin-left: 30px;">{{questions?.question}}</h4>
-    </div>
-    <!-- <hr style="color: grey;width: 75%;"> -->
-    @if(questions.answerType === 'textBox'){
-    <div style="display: flex;align-items: center;justify-content: start;min-width: 90%;margin: 15px 30px;">
-      <mat-form-field style="font-size: 20px; width:75% ;box-shadow:  1px 0px px 0px rgba(0, 0, 0, 0.1)">
-        <textarea matInput placeholder="Enter your answer here..."></textarea>
-      </mat-form-field>
-    </div>
-    }
-    @if(questions.answerType === 'radio' && questions.answer.length){
-    <mat-radio-group
-      style="display: flex;flex-direction: column; align-items: flex-start;min-width: 90%;margin: 5px 30px;">
-      @for (answers of questions.answer; track answers) {
-      <mat-radio-button 
-        [value]="answers?.answerDetails">{{answers.answerDetails}}</mat-radio-button>
-      }
-    </mat-radio-group>
-    }
-    @if(questions.answerType === 'checkBox' && questions.answer.length){
-    <div style="display: flex;flex-direction: column; align-items: flex-start;min-width: 90%;margin: 5px 30px;">
-      @for (answers of questions.answer; track answers) {
-      <mat-checkbox>{{answers.answerDetails}}</mat-checkbox>
-      }
-    </div>
-    }
-  </mat-card>
-  }
-  <div style="display: flex;align-items: center;justify-content: end;min-width: 75%;margin: 5px 30px 15px 30px;">
-  <button mat-flat-button style="background-color: var(--primary-theme-color); color: white;">
-    submit
-  </button>
-  </div>
-</mat-card>
 </div>
