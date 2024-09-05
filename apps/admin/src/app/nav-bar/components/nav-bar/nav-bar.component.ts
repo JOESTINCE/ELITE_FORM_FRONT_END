@@ -10,7 +10,7 @@ export class NavBarComponent implements OnDestroy{
   mobileQuery: MediaQueryList;
 
   fillerNav = [
-    { title:'Dashboard', url:'/app' },
+    { title:'Dashboard', url:'/app/dashboard' },
     { title: 'Forms', url: '/app/formlist' },
   ];
 

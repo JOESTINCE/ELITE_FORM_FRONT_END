@@ -16,6 +16,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [],
   imports: [
@@ -34,7 +35,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatPaginatorModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBar
   ],
   exports:[
     CommonModule,
@@ -52,7 +54,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatPaginatorModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSnackBar
   ]
 })
 export class CommonMatModuleModule { }

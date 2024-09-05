@@ -11,6 +11,10 @@ import { CommonHeaderComponent } from './common-components/components/common-hea
 import { FormsListComponent } from './forms/components/forms-list/forms-list.component';
 import { CommonTableComponent } from './common-components/components/common-table/common-table.component';
 import { DisplayFormComponent } from './display-form/components/display-form/display-form.component';
+import { SignInComponent } from './authentication/components/sign-in/sign-in.component';
+import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
+import { CommonChartComponent } from './common-components/components/common-chart/common-chart.component';
+import { SignUpComponent } from './authentication/components/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { DisplayFormComponent } from './display-form/components/display-form/dis
     NavBarComponent,
     CommonHeaderComponent,
     CommonTableComponent,
-    DisplayFormComponent
+    DisplayFormComponent,
+    SignInComponent,
+    DashboardComponent,
+    CommonChartComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,

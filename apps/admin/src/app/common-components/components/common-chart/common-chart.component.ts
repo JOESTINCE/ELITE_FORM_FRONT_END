@@ -1,0 +1,76 @@
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Chart, registerables } from 'chart.js';
+
+@Component({
+  selector: 'app-common-chart',
+  templateUrl: './common-chart.component.html',
+  styleUrl: './common-chart.component.scss'
+})
+export class CommonChartComponent {
+  private chart!: Chart;
+  @ViewChild('MyChart') myChart!: ElementRef<HTMLCanvasElement>;
+  axisColor: string = 'rgba(255,2555,255,0.3)';
+  constructor() { }
+
+  ngOnInit(): void {
+    Chart.register(...registerables);
+
+  }
+  ngAfterViewInit(): void {
+    this.createChart();
+  }
+  createChart(): void {
+    if (this.chart) {
+      this.chart.destroy();
+      console.log("Existing chart destroyed before creating a new one");
+    }
+
+    const canvas = this.myChart.nativeElement;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+          datasets: [{
+            label: 'Forms submitted',
+            data: [0, 8, 5, 7, 3, 2, 1],
+            borderColor: '#0140C1',
+            backgroundColor: '#0140C1',
+            borderWidth: 2,
+            pointBackgroundColor: '#0140C1'
+          }]
+        },
+        options: {
+          aspectRatio: 3,
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: this.axisColor,
+              },
+              max: 21,
+              ticks: {
+                stepSize: 3
+              }
+            },
+            x: {
+              grid: {
+                color: this.axisColor,
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+
+    }
+  }
+}

@@ -1,0 +1,53 @@
+<div class="parent-container">
+  <div class="child-container">
+    <div class="image-div">
+      <img src="assets/images/signIn.png" class="login-image">
+    </div>
+    <mat-card class="form-parent-div">
+      <form class="form-div" [formGroup]="signUpForm">
+        <div style="padding-top:20px!important">
+        <h2>Sign up into forms account</h2>
+        </div>
+        <hr class="form-input">
+        <mat-form-field class="form-input">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+          <mat-error *ngIf="signUpForm?.get('email')?.hasError('required')">
+            Email is required!
+          </mat-error>
+          <mat-error *ngIf="signUpForm?.get('email')?.hasError('email')">
+            Invalid email format!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-input">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="'password'" formControlName="password">
+          <mat-error *ngIf="signUpForm?.get('password')?.hasError('required')">
+            Password is required!
+          </mat-error>
+          <mat-error *ngIf="signUpForm?.get('password')?.errors?.passwordStrength">
+            Password is in incorrect format!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-input">
+          <mat-label>Confirm password</mat-label>
+          <input matInput [type]="hide() ? 'password' : 'text'" formControlName="confirmPassword">
+          <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="signUpForm?.get('confirmPassword')?.hasError('required')">
+            Password confirmation is required!
+          </mat-error>
+          <mat-error *ngIf="!signUpForm?.get('confirmPassword')?.hasError('required') && signUpForm?.get('confirmPassword')?.errors?.passwordStrength">
+            Password is in incorrect format!
+          </mat-error>
+        </mat-form-field>
+        <button mat-flat-button class="login-button" (click)="onRegister()">
+          Register
+        </button>
+        <p class="sign-up-link">already have an account? <a href="/signin">sign up</a></p>
+      </form>
+    </mat-card>
+  </div>
+</div>

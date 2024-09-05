@@ -1,4 +1,175 @@
+::ng-deep .custom-mat-radio-button.mat-intenal-form-field {
+  font-size: 18px !important;
+}
 
-::ng-deep .custom-mat-radio-button.mat-intenal-form-field{
-  font-size:18px!important;
+.form-page-container {
+  width: auto;
+  min-height: 85%;
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-header-card {
+  box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+  min-width: 75%;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-left: 5px solid var(--primary-theme-color);
+}
+
+.form-header-div {
+  padding: 22px 20px 15px 20px;
+}
+
+.form-header {
+  margin: 0px;
+  font-size: 35px;
+}
+
+.form-desc-seperator {
+  color: grey;
+  width: 75%;
+}
+
+.form-description-div {
+  padding: 15px 20px 25px 20px;
+}
+
+.form-description {
+  margin: 0px;
+  font-size: 25px
+}
+
+.form-div {
+  width: 100%;
+}
+
+.form-array-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-width: 100%;
+}
+
+.form-group-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 75%;
+}
+
+.form-details-card {
+  padding: 20px 15px;
+  box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  flex-direction: column;
+  border-left: 5px solid var(--primary-theme-color);
+  word-break: break-word;
+}
+
+@media(min-width: 600px) {
+  .form-question {
+    font-size: 20px;
+    margin-left: 30px;
+  }
+
+  .form-radio-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 90%;
+    margin: 5px 30px;
+  }
+
+  .form-text-box-div {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    min-width: 90%;
+    margin: 15px 30px;
+  }
+
+  .form-check-box-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 90%;
+    margin: 5px 30px;
+  }
+}
+
+@media(max-width: 600px) {
+  .form-question {
+    font-size: 20px;
+  }
+
+  .form-radio-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 90%;
+    margin: 5px 0px;
+  }
+
+  .form-text-box-div {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    min-width: 90%;
+    margin: 15px 0px;
+  }
+
+  .form-check-box-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 90%;
+    margin: 5px 0px!important;
+  }
+}
+
+.form-text-box-div {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  min-width: 90%;
+  margin: 15px 30px;
+}
+
+.form-text-box {
+  font-size: 20px;
+  width: 75%;
+  box-shadow: 1px 0px px 0px rgba(0, 0, 0, 0.1)
+}
+
+.form-check-box-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 90%;
+  margin: 5px 30px;
+}
+
+.form-submit-button-div {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  min-width: 75%;
+  margin: 5px 30px 15px 30px;
+}
+
+.form-submi-button {
+  background-color: var(--primary-theme-color)!important;
+  color: white!important;
 }

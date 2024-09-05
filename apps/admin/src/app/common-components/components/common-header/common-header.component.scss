@@ -1,0 +1,80 @@
+.header-page-container-div {
+  width: 100%;
+}
+
+.header-parent-div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px;
+}
+
+.header-div {
+  display: flex;
+  min-width: 95%;
+  flex-direction: column; // Default to column for small screens
+  margin-top: 20px;
+  min-width: 100%;
+}
+
+.header-button-div {
+  min-width: 60%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; // Margin for small screens
+  align-items: center;
+  gap: 10px;
+}
+
+.header {
+  font-size: 29px !important;
+  font-weight: 400 !important;
+  min-width: 40% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-button {
+  background-color: var(--primary-theme-color) !important;
+  color: white !important;
+  margin-left: 0px !important;
+}
+
+@media (min-width: 600px) {
+  .header-div {
+    flex-direction: row; // Row layout for larger screens
+    margin-top: 0px;
+    min-width: unset;
+  }
+    .header-button {
+  margin-left: 10px !important;
+    }
+
+  .header-button-div {
+    justify-content: flex-end; // Align buttons to the right on larger screens
+    margin-top: 0; // Remove top margin on larger screens
+      gap: unset;
+    
+  }
+
+  .header {
+    display: unset;
+    align-items: unset;
+    justify-content: unset;
+  }
+
+  .header-parent-div {
+    width: 95%;
+    display: unset;
+    align-items: unset;
+    justify-content: unset;
+    padding: 30px 40px 0px 40px!important;
+  }
+
+  .header-page-container-div {
+    width: 95%;
+    padding-left: 40px;
+  }
+}

@@ -1,0 +1,42 @@
+<div class="parent-container">
+  <div class="child-container">
+    <div class="image-div">
+      <img src="assets/images/signIn.png" class="login-image">
+    </div>
+    <mat-card class="form-parent-div">
+      <form class="form-div" [formGroup] = 'signInForm'>
+        <h2>Log in to forms account</h2>
+        <hr class="form-input">
+        <mat-form-field class="form-input">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+          <mat-error  *ngIf="signInForm?.get('email')?.hasError('required')">
+            Email is required!
+          </mat-error>
+          <mat-error *ngIf="signInForm?.get('email')?.hasError('email')">
+            Invalid email format!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-input">
+          <mat-label>Password</mat-label>
+          <mat-error *ngIf="signInForm?.get('password')?.hasError('required')">
+            Password is required!
+          </mat-error>
+          <mat-error *ngIf="signInForm?.get('password')?.errors?.passwordStrength">
+            Password is in incorrect format!
+          </mat-error>
+          <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+        </mat-form-field>
+        <p class="forgot-password">Forgot password?<a href="">reset</a></p>
+        <button mat-flat-button class="login-button" (click)="onLogin()">
+          login
+        </button>
+        <p class="sign-up-link">Doesn't have account? <a href="/signup">sign up</a></p>
+      </form>
+    </mat-card>
+  </div>
+</div>

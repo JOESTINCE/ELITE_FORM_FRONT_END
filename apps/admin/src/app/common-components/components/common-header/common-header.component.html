@@ -1,12 +1,12 @@
-  <div style="width: 95%">
-  <div style="width: 95%; padding: 30px 40px 0px 40px;">
-    <div style="display: flex; flex-direction: row; min-width: 95%">
-    <div style="font-size: 29px; font-weight:400; min-width: 50%">
-      {{heading}}
+  <div class="header-page-container-div">
+  <div class="header-parent-div">
+    <div class="header-div">
+    <div class="header">
+      <h1>{{heading}}</h1>
     </div>
-    <div style="min-width: 50%;display: flex; place-content: center flex-end;">
+    <div class="header-button-div">
     <div *ngFor = "let item of buttonDetails" >
-      <button mat-flat-button style="background-color: var(--primary-theme-color); color: white; margin-left: 10px;" (click) = "buttonClicked(item?.text)">{{item?.text}}</button>
+      <button mat-flat-button class="header-button" (click) = "buttonClicked(item?.text)">{{item?.text}}</button>
     </div>
     </div>
     </div>
