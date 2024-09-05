@@ -2,6 +2,9 @@ import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { passwordStrengthValidator } from '../../validators/password-strength-validator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SignupService } from '../../services/signup.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,8 +13,11 @@ import { passwordStrengthValidator } from '../../validators/password-strength-va
 })
 export class SignUpComponent {
   signUpForm!:any;
+  subscriptionObj: Subscription = new Subscription();
   constructor(
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private signUpService: SignupService
   ) {
 
   }
@@ -20,10 +26,27 @@ export class SignUpComponent {
   }
   onRegister() {
     if(this.signUpForm?.value?.password !== this.signUpForm?.value?.confirmPassword){
-
+      this.snackBar.open('Password mismatches with confirm password', 'okay', {
+        duration: 2000,
+        panelClass: ['red-snack-bar']
+      })
     }
     else if(this.signUpForm.valid){
-      this.router.navigate(['/signin']);
+      if(this.signUpForm?.value?.email && this.signUpForm?.value?.password){
+        this.subscriptionObj.add(this.signUpService.createUser(
+          {
+            email: this.signUpForm.email, 
+            password: this.signUpForm.password
+          }).subscribe((res)=>{
+            if(res){
+              this.snackBar.open('Registration successful', 'okay', {
+                duration: 2000,
+                panelClass: ['green-snack-bar']
+              });
+              this.router.navigate(['/signin']);
+            }
+          }))
+      }
     }
   }
   initializeSignUpForm(){

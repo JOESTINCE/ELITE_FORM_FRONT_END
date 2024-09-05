@@ -10,6 +10,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       --secondary-theme-color:#7e79ac;
       --tertiary-theme-color:#2A5AC5;
     }
+    .mat-mdc-snack-bar-container {
+      &.red-snack-bar {
+        --mdc-snackbar-container-color: #ff170b;
+        --mat-mdc-snack-bar-button-color: #ff170b;
+        --mdc-snackbar-supporting-text-color: #fff;
+        --mat-snack-bar-button-color: white;
+      }      
+      &.green-snack-bar {
+        --mdc-snackbar-container-color: #00b11d;
+        --mat-mdc-snack-bar-button-color: #00b11d;
+        --mdc-snackbar-supporting-text-color: #fff;
+        --mat-snack-bar-button-color: white;
+      }
+    }
+
   // Manipulate background color on hover and focus
 //   .mat-mdc-form-field-focus-overlay {
 //     background-color: transparent !important;

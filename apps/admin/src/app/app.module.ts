@@ -15,6 +15,8 @@ import { SignInComponent } from './authentication/components/sign-in/sign-in.com
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
 import { CommonChartComponent } from './common-components/components/common-chart/common-chart.component';
 import { SignUpComponent } from './authentication/components/sign-up/sign-up.component';
+import { environment } from '../environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,7 @@ import { SignUpComponent } from './authentication/components/sign-up/sign-up.com
     SignInComponent,
     DashboardComponent,
     CommonChartComponent,
-    SignUpComponent
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,9 @@ import { SignUpComponent } from './authentication/components/sign-up/sign-up.com
     CommonMatModuleModule,
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    provideHttpClient(),
+    {provide: 'environment', useValue: environment}
   ],
   bootstrap: [AppComponent]
 })
