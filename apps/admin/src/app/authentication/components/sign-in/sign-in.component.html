@@ -22,9 +22,6 @@
           <mat-error *ngIf="signInForm?.get('password')?.hasError('required')">
             Password is required!
           </mat-error>
-          <mat-error *ngIf="signInForm?.get('password')?.errors?.passwordStrength">
-            Password is in incorrect format!
-          </mat-error>
           <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password">
           <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide()">

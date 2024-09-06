@@ -16,7 +16,8 @@ import { DashboardComponent } from './dashboard/components/dashboard/dashboard.c
 import { CommonChartComponent } from './common-components/components/common-chart/common-chart.component';
 import { SignUpComponent } from './authentication/components/sign-up/sign-up.component';
 import { environment } from '../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { httpReqResInterceptor } from './authentication/services/http.interceptor'; // Import your function-based interceptor
 
 @NgModule({
   declarations: [
@@ -38,10 +39,14 @@ import { provideHttpClient } from '@angular/common/http';
     CommonMatModuleModule,
   ],
   providers: [
+    {provide: 'environment', useValue: environment},
     provideAnimationsAsync(),
-    provideHttpClient(),
-    {provide: 'environment', useValue: environment}
+    provideHttpClient(
+      withInterceptors([httpReqResInterceptor])
+    ),
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  
+ }

@@ -35,9 +35,11 @@ export class SignUpComponent {
       if(this.signUpForm?.value?.email && this.signUpForm?.value?.password){
         this.subscriptionObj.add(this.signUpService.createUser(
           {
-            email: this.signUpForm.email, 
-            password: this.signUpForm.password
-          }).subscribe((res)=>{
+            email: this.signUpForm.value.email, 
+            password: this.signUpForm.value.password
+          }).subscribe(
+            {
+              next: (res)=>{
             if(res){
               this.snackBar.open('Registration successful', 'okay', {
                 duration: 2000,
@@ -45,7 +47,23 @@ export class SignUpComponent {
               });
               this.router.navigate(['/signin']);
             }
-          }))
+          },
+          error: (err)=>{
+            if(err){
+              if (err?.error === 'USER_ALREADY_EXIST'){
+                this.snackBar.open('Email ID already exist!', 'okay', {
+                  duration: 2000,
+                  panelClass: ['red-snack-bar']
+                })
+              }
+              else{
+                this.snackBar.open('Falied to create user', 'okay', {
+                  duration: 2000,
+                  panelClass: ['red-snack-bar']
+                })
+              }
+            }
+          }}))
       }
     }
   }
@@ -77,5 +95,7 @@ export class SignUpComponent {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
-
+  ngOnDestroy(){
+    this.subscriptionObj.unsubscribe();
+  }
 }
