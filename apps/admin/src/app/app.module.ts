@@ -18,6 +18,9 @@ import { SignUpComponent } from './authentication/components/sign-up/sign-up.com
 import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpReqResInterceptor } from './authentication/services/http.interceptor'; // Import your function-based interceptor
+import { CommonButtonLoaderComponent } from './common-components/components/common-button-loader/common-button-loader.component';
+import { CommonPageLoaderComponent } from './common-components/components/common-page-loader/common-page-loader.component';
+import { ResponseListComponent } from './forms/components/response-list/response-list.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { httpReqResInterceptor } from './authentication/services/http.intercepto
     DashboardComponent,
     CommonChartComponent,
     SignUpComponent,
+    CommonButtonLoaderComponent,
+    CommonPageLoaderComponent,
+    ResponseListComponent
   ],
   imports: [
     BrowserModule,

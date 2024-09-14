@@ -6,6 +6,8 @@ import { CommonMatModuleModule } from '../common-mat-module/common-mat-module.mo
 import { CommonChartComponent } from './components/common-chart/common-chart.component';
 import { registerables } from 'chart.js';
 import { Chart } from 'chart.js';
+import { CommonButtonLoaderComponent } from './components/common-button-loader/common-button-loader.component';
+import { CommonPageLoaderComponent } from './components/common-page-loader/common-page-loader.component';
 Chart.register(...registerables);
 
 
@@ -14,7 +16,9 @@ Chart.register(...registerables);
   declarations: [
     CommonHeaderComponent,
     CommonTableComponent,
-    CommonChartComponent
+    CommonChartComponent,
+    CommonButtonLoaderComponent,
+    CommonPageLoaderComponent
   ],
   imports: [
     CommonModule,

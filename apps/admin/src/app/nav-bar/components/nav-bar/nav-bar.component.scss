@@ -33,4 +33,9 @@
        `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
   }
+  .nav-bar{
+    // background-image: linear-gradient(var(--primary-theme-color), rgb(255, 223, 223));
+    background-color: var(--primary-theme-color);
+      min-width: 224px;
+  }
   

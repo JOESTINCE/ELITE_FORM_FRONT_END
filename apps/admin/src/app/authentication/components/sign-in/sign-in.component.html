@@ -30,7 +30,8 @@
         </mat-form-field>
         <p class="forgot-password">Forgot password?<a href="">reset</a></p>
         <button mat-flat-button class="login-button" (click)="onLogin()">
-          login
+          <span *ngIf="!isButtonLoader">login</span>
+          <app-common-button-loader *ngIf="isButtonLoader"></app-common-button-loader>
         </button>
         <p class="sign-up-link">Doesn't have account? <a href="/signup">sign up</a></p>
       </form>

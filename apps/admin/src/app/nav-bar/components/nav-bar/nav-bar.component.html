@@ -2,7 +2,7 @@
   
       <mat-sidenav-container class="example-sidenav-container"
                             [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
-        <mat-sidenav #snav style=" background-image: linear-gradient(var(--primary-theme-color), rgb(255, 223, 223));min-width: 224px;" [mode]="mobileQuery.matches ? 'over' : 'side'"
+        <mat-sidenav #snav class="nav-bar" [mode]="mobileQuery.matches ? 'over' : 'side'"
                     [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
           <div style="display: flex;min-height: 22%;border-bottom: 5px solid rgb(255, 255, 255);">
             <div style="padding: 25px;min-width: 76%;min-height: 100%;">
@@ -11,9 +11,9 @@
               </div>
             </div>
           </div>
-          <mat-nav-list>
+          <mat-nav-list style="margin-top: 10px;" >
             @for (nav of fillerNav; track nav) {
-              <a mat-list-item [routerLink]="nav?.url">{{nav?.title}}</a>
+              <a mat-list-item [routerLink]="nav?.url"  style="display: flex;align-items: center;justify-content: center;"><p style="font-size: 19px!important; color: white!important;font-weight: 500!important;margin-left: 20px;display: flex;">{{nav?.title}}</p></a>
             }
           </mat-nav-list>
         </mat-sidenav>
@@ -23,9 +23,12 @@
         </mat-sidenav-content> -->
         <mat-sidenav-content>
           <mat-toolbar style="top: 0px; box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.1)!important;background-color: white;"
-            class="example-toolbar tool-bar">
+            class="example-toolbar tool-bar" style="display: flex; flex-direction: row;">
             <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-            <h1 class="example-app-name">Forms</h1>
+            <h1 class="example-app-name" style="width: 80%;">Forms</h1>
+            <div style="width: 10%; display: flex;align-items: end;justify-content: end;">
+              <mat-icon style="cursor: pointer;display: flex;" [matTooltip]="'Logout'" (click)="onLogOut()">exit_to_app</mat-icon>
+              </div>
           </mat-toolbar>
           <!-- <p><button mat-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button></p> -->
           <router-outlet></router-outlet>

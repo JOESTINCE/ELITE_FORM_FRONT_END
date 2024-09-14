@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ChangeDetectorRef, OnDestroy} from '@angular/core';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
@@ -12,13 +13,17 @@ export class NavBarComponent implements OnDestroy{
   fillerNav = [
     { title:'Dashboard', url:'/app/dashboard' },
     { title: 'Forms', url: '/app/formlist' },
+    { title: 'Responses', url: '/app/responselist' },
   ];
 
 
 
   private _mobileQueryListener: () => void;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+  constructor(
+    changeDetectorRef: ChangeDetectorRef, 
+    media: MediaMatcher,
+    private router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -28,4 +33,8 @@ export class NavBarComponent implements OnDestroy{
   }
   shouldRun = true;
   // shouldRun = /(^|.)(stackblitz|webcontainer).(io|com)$/.test(window.location.host);
+  onLogOut(){
+    localStorage.clear();
+    this.router.navigate(['/signin']);
+  }
 }

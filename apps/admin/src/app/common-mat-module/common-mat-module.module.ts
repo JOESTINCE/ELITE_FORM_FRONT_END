@@ -16,6 +16,9 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 @NgModule({
   declarations: [],
   imports: [
@@ -35,6 +38,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatPaginatorModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatAccordion,
+    MatExpansionModule,
   ],
   exports:[
     CommonModule,
@@ -53,6 +60,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatPaginatorModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatAccordion,
+    MatExpansionModule,
   ]
 })
 export class CommonMatModuleModule { }

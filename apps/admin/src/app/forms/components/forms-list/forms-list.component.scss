@@ -1,117 +1,141 @@
-@media(min-width: 950px) {
   .pageContainer {
-    padding: 50px 100px;
+    padding: 50px;
     min-height: 75%;
     width: auto;
     margin: 30px 20px 20px 20px;
-  }
-
-  .detailsDiv {
-    min-width: 75%;
-    padding-right: 20px;
-  }
-}
-
-@media(min-width: 600px) {
-  .formImage {
-    width: 146px;
-  }
-}
-
-@media(min-width: 600px) {
-  .detailsParentDiv {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+
+  .formImage {
+    width: 80px;
+  }
+
+  .imageDiv {
+    min-width: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media(max-width: 830px) {
+    .detailsCard {
+      margin-bottom: 15px;
+      min-height: 100%;
+      width: auto;
+      padding: 20px;
+      box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      border-left: 5px solid var(--primary-theme-color);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detailsParentDiv {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 50%;
+    }
+
+    .detailsDiv {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+
+  @media(min-width: 830px) {
+    .detailsCard {
+      margin-bottom: 15px;
+      min-height: 100%;
+      width: auto;
+      // padding: 20px;
+      box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      border-left: 5px solid var(--primary-theme-color);
+      width: 48%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detailsParentDiv {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      width: 50%;
+      gap: 50px;
+    }
+
+    .detailsDiv {
+      min-width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+
+
+  .formDescription {
+    word-break: break-word;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+  }
+
+  .formIcons {
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    gap: 20px;
+    margin: 10px 0px;
+  }
+
+  .copyIcon {
+    cursor: pointer;
+  }
+
+  .editIcon {
+    cursor: pointer;
+    color: green;
+  }
+
+  .deleteIcon {
+    cursor: pointer;
+    color: red;
+  }
+
+  .paginator {
+    box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1) !important;
+    margin: 6px 0px 0px;
+    width: 100%;
+  }
+
+  .matCardsParentDiv {
+    display: flex;
+    align-items: center;
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
   }
 
-  .imageDiv {
-    min-width: 25%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .formTitle {
+    margin-top: 20px;
+     -webkit-line-clamp: 1;
+     display: -webkit-box;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     -webkit-box-orient: vertical;
   }
-}
-
-@media(max-width: 600px) {
-  .formImage {
-    width: 150px;
-  }
-
-  .detailsParentDiv {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .imageDiv {
-    min-width: 25%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-}
-
-@media(max-width: 950px) {
-  .pageContainer {
-    padding: 50px 30px;
-    min-height: 75%;
-    width: auto;
-    margin: 30px 20px 20px 20px;
-  }
-
-  .imageDiv {
-    min-width: 40%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .detailsDiv {
-    min-width: 60%;
-    padding-right: 20px;
-  }
-
-}
-
-.detailsCard {
-  margin-bottom: 15px;
-  min-height: 20%;
-  width: auto;
-  padding: 20px;
-  box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  border-left: 5px solid var(--primary-theme-color);
-}
-
-
-
-.formDescription {
-  word-break: break-word;
-}
-
-.formIcons {
-  display: flex;
-  align-items: end;
-  justify-content: end;
-  gap: 20px;
-  padding-right: 40px;
-}
-
-.editIcon {
-  cursor: pointer;
-  color: green;
-}
-
-.deleteIcon {
-  cursor: pointer;
-  color: red;
-}
-
-.paginator {
-  box-shadow: inset 0px 0px 4px 3px rgba(0, 0, 0, 0.1) !important;
-  margin: 6px 0px 0px;
-}

@@ -8,16 +8,18 @@ import { SignInComponent } from './authentication/components/sign-in/sign-in.com
 import { DashboardComponent } from './dashboard/components/dashboard/dashboard.component';
 import { CommonChartComponent } from './common-components/components/common-chart/common-chart.component';
 import { SignUpComponent } from './authentication/components/sign-up/sign-up.component';
+import { ResponseListComponent } from './forms/components/response-list/response-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'app', pathMatch: 'full' },
+  { path: '', redirectTo: 'signin', pathMatch: 'full' },
   {path:'app', component: NavBarComponent, children:[
     { path: 'addeditform', component: AddEditFormsComponent },
+    { path: 'addeditform/:id', component: AddEditFormsComponent },
     { path: 'formlist', component: FormsListComponent},
     { path: 'dashboard', component: DashboardComponent },
-    { path: 'chart', component: CommonChartComponent }
+    { path: 'responselist', component: ResponseListComponent}
   ]},
-  { path: 'form', component: DisplayFormComponent },
+  { path: 'form/:id', component: DisplayFormComponent },
   {path:'signin', component: SignInComponent},
   { path: 'signup', component: SignUpComponent }
 ];

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-
+import { CommonServiceService } from '../../../common-components/services/common-service.service';
+import { Subscription } from 'rxjs';
+import { DashboardService } from '../../services/dashboard.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -8,13 +10,38 @@ import { Component } from '@angular/core';
 export class DashboardComponent {
   greetingHeader!: string;
   greetingTime!: string;
-  constructor(){
+  isLoader:boolean=false;
+  subscriptionObj: Subscription = new Subscription();
+  formsCreated: any;
+  totalUsers: any;
+  submitted: any;
+  constructor(
+    private commonService: CommonServiceService,
+    private dashboardService: DashboardService
+  ){
 
   }
   ngOnInit(){
+    this.getDashboardDetails();
     this.getGreetingTime();
-   
-    console.log(new Date().getHours());
+    }
+  getDashboardDetails(){
+    const userId = this.commonService.decrypt(localStorage.getItem('userId'));
+    if(userId){
+      this.subscriptionObj.add(this.dashboardService.getDashboardDetails({userId: userId}).subscribe({
+        next: (res: any)=>{
+          if(res?.data){
+            this.formsCreated = res?.data?.formsCreated;
+            this.totalUsers = res?.data?.formsSubmitted;
+            this.submitted = res?.data?.formsSubmitted;
+          }
+        },
+        error :()=>{
+
+        }
+      }))
+    }
+
   }
   getGreetingTime(){
     const currentDate = new Date()
@@ -28,7 +55,8 @@ export class DashboardComponent {
       day: 'numeric'
     }
     this.greetingTime = currentDate.toLocaleDateString('en-US', timeFormat);
-
-
+  }
+  ngOnDestroy(){
+    this.subscriptionObj.unsubscribe();
   }
 }

@@ -1,7 +1,7 @@
 <app-common-header [heading]="heading" [buttonDetails]="buttonDetails"
   (onButtonClick)='onButtonClick($event)'></app-common-header>
 <mat-card class="page-container">
-  <form class=add-edit-form [formGroup]="form">
+  <form *ngIf= "form" class=add-edit-form [formGroup]="form">
     <div style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
       <mat-card class="form-title-card">
         <mat-form-field style="font-size: 35px">
@@ -33,7 +33,7 @@
             <div formArrayName="answer">
               <div *ngFor="let answer of info?.controls?.answer?.controls let answerIndex = index" class="answer-row">
                 <div [formGroupName]="answerIndex">
-                  <mat-form-field style="font-size: 15px; margin: 0px; min-width: 73%">
+                  <mat-form-field  style="font-size: 15px; margin: 0px; min-width: 73%">
                     <input matInput placeholder="Enter your answer.." formControlName="answerDetails">
                   </mat-form-field>
                 </div>

@@ -1,29 +1,32 @@
 <app-common-header [heading]="heading" [buttonDetails]="buttonDetails"
   (onButtonClick)='onButtonClick($event)'></app-common-header>
 <mat-card class="pageContainer">
-  @for(rows of columnData?.rows; track rows){
-  <mat-card class="detailsCard">
-    <div class="detailsParentDiv">
-      <div class="imageDiv">
-        <img class="formImage" src="assets/images/formImage.png" alt="">
-      </div>
-      <div class="detailsDiv">
-        <h2>{{rows?.formName}}</h2>
-        <h4 class="formDescription">{{rows?.formDescription}} </h4>
-        <div class="formIcons">
-          <mat-icon class="editIcon">edit</mat-icon>
-          <mat-icon class="deleteIcon">delete</mat-icon>
-        </div>
-      </div>
-    </div>
-  </mat-card>
-  }
+  <div class="matCardsParentDiv">
+    @for(rows of columnData?.rows; track rows){
 
-  <mat-paginator #paginator class="paginator" (page)="handlePageEvent($event)" [length]="limit"
-    [pageSize]="columnData?.count" [disabled]="disabled" [showFirstLastButtons]="showFirstLastButtons"
-    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize" [pageIndex]="offset"
+    <mat-card class="detailsCard">
+      <div class="detailsParentDiv">
+        <div class="imageDiv">
+          <img class="formImage" src="assets/images/formImage.png" alt="">
+        </div>
+        <div class="detailsDiv">
+          <h2 class="formTitle" [matTooltip]="rows?.title">{{rows?.title}}</h2>
+          <h4 class="formDescription" [matTooltip]="rows?.description">{{rows?.description}} </h4>
+          <div class="formIcons">
+            <mat-icon class="copyIcon" [matTooltip]="'Copy form url.'" (click)="copyToClipboard(rows?.formDetailsId)">content_copy</mat-icon>
+            <mat-icon class="editIcon" [matTooltip]="'Edit form details.'"(click)="onFormEdit((rows?.formDetailsId).toString().split('/')[4])">edit</mat-icon>
+            <mat-icon class="deleteIcon" [matTooltip]="'delete form.'" (click)="onFormDeletion(rows?.id)">delete</mat-icon>
+          </div>
+        </div>
+        <!-- <mat-icon>settings</mat-icon> -->
+      </div>
+    </mat-card>
+    }
+  </div>
+  <mat-paginator #paginator class="paginator" (page)="handlePageEvent($event)" [length]="length" [pageSize]="pageSize"
+    [disabled]="disabled" [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize" [pageIndex]="pageIndex"
     aria-label="Select page">
   </mat-paginator>
-
 
 </mat-card>

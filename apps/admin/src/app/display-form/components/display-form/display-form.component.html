@@ -1,5 +1,6 @@
 <div style="padding: 30px;">
-  <mat-card class="form-page-container">
+  <mat-card class="form-page-container" *ngIf="form">
+          <div #scrollTop></div>
     <mat-card class="form-header-card">
       <div class="form-header-div">
         <h1 class="form-header">{{formData.title}}</h1>

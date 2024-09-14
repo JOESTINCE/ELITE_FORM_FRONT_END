@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { DisplayFormService } from '../../services/display-form.service';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-display-form',
@@ -7,63 +11,35 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styleUrl: './display-form.component.scss'
 })
 export class DisplayFormComponent {
-  formData = {
-    "title": "Test Form",
-    "description": "This is a test form",
-    "items": [
-      {
-        "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla scelerisque tristique odio ac aliquet.",
-        "answerType": "radio",
-        "answer": [
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 1"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 2"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 3"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 4"
-          }
-        ]
-      },
-      {
-        "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla scelerisque tristique odio ac aliquet.",
-        "answerType": "checkBox",
-        "answer": [
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 1"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 2"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 3"
-          },
-          {
-            "answerDetails": "Lorem ipsum dolor sit amet 4"
-          }
-        ]
-      },
-      {
-        "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla scelerisque tristique odio ac aliquet.",
-        "answerType": "textBox",
-        "answer": [
-          {
-            "answerDetails": "test answer"
-          }
-        ]
-      }
-    ]
-  }; 
+  formData: any
   form: any;
   isFormInitialized: boolean=false;
+  subscriptionObj: Subscription = new Subscription();
+  @Input() formId: any;
+  @Input() isFromFormList!: boolean;
+  @ViewChild('scrollTop') scrollTop!: ElementRef;  // Element to focus after disable
+  constructor(
+    private displayFormService: DisplayFormService,
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ){
+
+  }
   ngOnInit(){
-    console.log('ngOnInit is called')
-    this.initializeForm();
-    console.log('formDetails',this.form.value)
+    if(!this.formId){
+      this.formId = this.activatedRoute?.snapshot?.paramMap?.get('id') ?? null;
+    }
+    this.subscriptionObj.add(this.displayFormService.getOneForm(this.formId).subscribe({
+      next: (res: any)=>{
+        if(res?.data?.formData){
+          this.formData = res?.data?.formData;
+          this.initializeForm();
+        }
+      },
+      error:()=>{
+
+      }
+    }))
   }
   ngAfterViewInit(){
     const overlaypane: any = document.querySelectorAll('.mdc-form-field');
@@ -77,7 +53,6 @@ export class DisplayFormComponent {
   //   this.isFormInitialized = true
   // } 
   initializeForm(){
-    console.log('inside initialize form')
     this.form = new FormGroup({items : new FormArray([])});
     if(this.formData?.items?.length){
      for(let i=0; i<this.formData.items.length; i++){
@@ -107,9 +82,30 @@ export class DisplayFormComponent {
        }
      }
     }
+    if(this.isFromFormList){
+      this.form.disable();
+      this.scrollTop.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
   }
   onFormSubmit(){
-    console.log(this.form.value)
+   if(this.form?.value){
+    this.subscriptionObj.add(this.displayFormService.saveForm({formResponse: this.form?.value, formDetailsId:this.formId}).subscribe({
+      next: (res)=>{
+        if(res){
+          this.snackBar.open('Form Saved Successfully', 'okay', {
+            duration: 2000,
+            panelClass: ['green-snack-bar']
+          });
+        }
+      },
+      error: ()=>{
+        this.snackBar.open('Failed to save snack bar', 'okay', {
+          duration: 2000,
+          panelClass: ['red-snack-bar']
+        });
+      }
+    }))
+   }
   }
   ohCheckBoxChange(event: any, outerIndex: any, innerIndex: any){
     let userAnswer = ((this.form.get('items') as FormArray).at(outerIndex) as FormGroup).get('userAnswer')?.value ?? [];
