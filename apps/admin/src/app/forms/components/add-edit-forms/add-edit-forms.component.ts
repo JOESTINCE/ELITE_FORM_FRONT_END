@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -7,6 +7,7 @@ import { FormsService } from '../../services/forms.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonServiceService } from '../../../common-components/services/common-service.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-edit-forms',
@@ -17,24 +18,30 @@ import { ActivatedRoute } from '@angular/router';
 export class AddEditFormsComponent {
   formId!: any;
   form: any;
+  settingsForm: any;
   answerType: any[] = [
     { value: 'radio', viewValue: 'Radio' },
     { value: 'checkBox', viewValue: 'checkBox' },
     { value: 'textBox', viewValue: 'Text box' },
+    { value: 'emailId', viewValue: 'Email ID'},
   ];
   heading!: string;
   buttonDetails : Array<{text: string}> = [
     {text: 'cancel'},
     { text: 'save' },
   ];
-  subscriptionObj = new Subscription()
+  subscriptionObj = new Subscription();
+  isEmailSelected: boolean = false;
+  @ViewChild('formSettings', { static: true }) formSettings!: TemplateRef<any>;
+
   constructor(
     private router: Router,
     private location: Location,
     private formService: FormsService,
     private snackBar: MatSnackBar,
     private commonService: CommonServiceService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog
   ) {
 
   }
@@ -75,6 +82,7 @@ export class AddEditFormsComponent {
           let mainForm = new FormGroup({
             question: new FormControl(items?.[i]?.question),
             answerType: new FormControl(items?.[i]?.answerType),
+            isRequired: new FormControl(items?.[i]?.isRequired),
             answer: new FormArray([]),
           })
           if(items?.[i]?.answer?.length){
@@ -89,6 +97,9 @@ export class AddEditFormsComponent {
         }
       }
     }
+    if(res?.data?.formSettings){
+      this.settingsForm.patchValue(res.data.formSettings);
+    }
   }
   initializeForm(id: any){
     if(!id){
@@ -98,17 +109,27 @@ export class AddEditFormsComponent {
         items: new FormArray([])
       });
     }
+    this.settingsForm = new FormGroup({
+      submissionHeader: new FormControl('Your response has been submitted'),
+      submissionMessage: new FormControl(null),
+      allowMultipleResponse: new FormControl(false),
+    })
   }
   onFormAddition() {
     (this.form.get('items') as FormArray).push(new FormGroup({
       question: new FormControl(null),
       answerType: new FormControl(null),
+      isRequired: new FormControl(false),
       answer: new FormArray([]),
     }))
+    console.log((this.form.get('items') as FormArray).value)
   }
-  onFormDeletion(index: number) {
+  onFormDeletion(index: number, isEmailId: boolean) {
     if (index >= 0) {
       (this.form.get('items') as UntypedFormArray).removeAt(index);
+    }
+    if(isEmailId){
+      this.isEmailSelected = false;
     }
   }
   onAnswerAddition(index: number) {
@@ -133,17 +154,23 @@ export class AddEditFormsComponent {
   }
   onAnswerTypeChange(index: number) {
     if (index >= 0) {
+      console.log(this.items.at(index).get('answerType')?.value);
       const answerTypeControl = this.items.at(index).get('answerType');
       const answers = this.getAnswersArray(index);
-      if (answerTypeControl && answerTypeControl.value === 'textBox') {
+      if (answerTypeControl && answerTypeControl.value === 'textBox' || answerTypeControl?.value === 'emailId') {
         if (answers.length) {
          answers.clear();
         } 
       }
+      else if(answerTypeControl?.value === 'emailId'){
+        this.isEmailSelected = true;
+      }
+
       if (answers.length == 0) {
-        answers.push(new FormGroup({
-          answerDetails: new FormControl(null)
-        }));
+   
+          answers.push(new FormGroup({
+            answerDetails: new FormControl(null)
+          }));
       }
     }
   }
@@ -182,11 +209,13 @@ export class AddEditFormsComponent {
     else{
       this.subscriptionObj.add(this.formService.createForm({ userId: Number(this.commonService.decrypt(userId)), ...this.form?.value }).subscribe({
         next: (res: any) => {
-          if (res?.success) {
+          if (res?.data?.formDetailsId) {
             this.snackBar.open('Form created successfully', 'okay', {
               duration: 2000,
               panelClass: ['green-snack-bar']
             });
+            this.formId = res.data.formDetailsId;
+            this.onSettingsSave(true);
             this.router.navigate(['/app/formlist']);
           }
         },
@@ -199,6 +228,35 @@ export class AddEditFormsComponent {
       }))
     }
   
+  }
+  openSettingsDialog(){
+    this.dialog.open(this.formSettings, { disableClose: false, width: '370px', height: '85%' })
+  }
+  closeDialog(){
+    this.dialog.closeAll();
+  }
+  onSettingsSave(hideSnackBar?: boolean){
+    if(this.settingsForm?.value && this.settingsForm?.valid){
+      this.subscriptionObj.add(this.formService.saveFormSettings({userId: this.commonService.decrypt(localStorage?.getItem('userId')),formDetailsId: this.formId, ...this.settingsForm?.value}).subscribe({
+        next: (res)=>{
+          if(res){
+            if(!hideSnackBar){
+              this.snackBar.open('Sucessfully saved settings', 'okay', {
+                duration: 2000,
+                panelClass: ['green-snack-bar']
+              });
+            }
+            this.dialog.closeAll()
+          }
+        },
+        error: ()=>{
+          this.snackBar.open('Failed to save form settings', 'okay', {
+            duration: 2000,
+            panelClass: ['red-snack-bar']
+          });
+        }
+      }))
+    }
   }
   ngOnDestroy(){
     this.subscriptionObj.unsubscribe();

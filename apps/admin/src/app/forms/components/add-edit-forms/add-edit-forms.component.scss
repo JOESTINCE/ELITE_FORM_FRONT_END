@@ -31,6 +31,19 @@
     font-size: 26px;
     cursor: pointer;
 }
+.add-form:hover{
+  color: var(--primary-theme-color);
+}
+.form-settings{
+  position: fixed;
+    left: 90%;
+    top: 34%;
+    font-size: 26px;
+    cursor: pointer;
+}
+.form-settings:hover{
+  color: var(--primary-theme-color);
+}
 .question-row{
   display: flex;
   flex-direction:row;
@@ -40,8 +53,9 @@
   display: flex;
   flex-direction:row;
   min-width: 73%;
-  gap: 3%;
+  // gap: 3%;
 }
+
 /* Angular 15 adds grey background on mat form components */
 /* below removes that background color */
 /* Manipulate initial background color*/

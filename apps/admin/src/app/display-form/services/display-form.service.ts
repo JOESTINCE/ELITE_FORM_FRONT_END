@@ -17,4 +17,8 @@ export class DisplayFormService {
   saveForm(body: any){
     return this.httpRoutingService.postMethod(API.RESPONSE_CURD, body);
   }
+  getOneFormResponse(id: string){
+    return this.httpRoutingService.getMethod(`${API.RESPONSE_CURD}/${id}`);
+
+  }
 }

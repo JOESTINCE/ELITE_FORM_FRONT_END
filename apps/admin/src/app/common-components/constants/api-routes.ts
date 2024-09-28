@@ -3,5 +3,7 @@ export const API = {
   SIGN_IN:'forms/signin/',
   FORM_CURD:'forms/',
   RESPONSE_CURD:'formresponse/',
-  DASHBOARD:'dashboard/'
+  DASHBOARD:'dashboard/',
+  SETTINGS:'settings/',
+  DUPLICATE_EMAIL:'common/duplicate-email/'
 }

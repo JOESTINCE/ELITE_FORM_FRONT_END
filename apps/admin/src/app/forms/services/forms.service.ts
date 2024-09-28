@@ -28,6 +28,8 @@ export class FormsService {
   }
   getAllFormResponse(query: any){
     return this.httpRoutingService.getMethod(API.RESPONSE_CURD, query);
-
+  }
+  saveFormSettings(body: any){
+    return this.httpRoutingService.postMethod(API.SETTINGS, body);
   }
 }

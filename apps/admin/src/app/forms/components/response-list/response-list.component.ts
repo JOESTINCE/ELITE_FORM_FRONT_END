@@ -28,6 +28,7 @@ export class ResponseListComponent {
   pageEvent!: PageEvent;
   limit: number = this.pageSize;
   offset: number = 0;
+  formResponseDetailsId!: string;
   @ViewChild('viewFormDetails', { static: true }) viewFormDetails!: TemplateRef<any>;
 
   constructor(
@@ -71,8 +72,9 @@ export class ResponseListComponent {
       }
     }))
   }
-  openDialog(){
-   const dialog =  this.dialog.open(this.viewFormDetails, { disableClose: false, width: '95%', height: '90%' });
+  openDialog(id: string){
+   this.formResponseDetailsId = id
+   this.dialog.open(this.viewFormDetails, { disableClose: false, width: '95%', height: '90%' });
   };
   closeDialog(){
     this.dialog.closeAll();

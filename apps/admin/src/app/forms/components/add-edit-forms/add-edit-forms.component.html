@@ -1,7 +1,7 @@
 <app-common-header [heading]="heading" [buttonDetails]="buttonDetails"
   (onButtonClick)='onButtonClick($event)'></app-common-header>
 <mat-card class="page-container">
-  <form *ngIf= "form" class=add-edit-form [formGroup]="form">
+  <form *ngIf="form" class=add-edit-form [formGroup]="form">
     <div style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
       <mat-card class="form-title-card">
         <mat-form-field style="font-size: 35px">
@@ -25,35 +25,47 @@
                 <mat-select formControlName="answerType" placeholder="answer type..."
                   (selectionChange)="onAnswerTypeChange(index);">
                   @for (data of answerType; track data) {
-                  <mat-option [value]="data.value">{{data.viewValue}}</mat-option>
+                  <mat-option [value]="data.value"
+                    [disabled]="data?.value === 'emailId' && isEmailSelected ? true : false">{{data.viewValue}}</mat-option>
                   }
                 </mat-select>
               </mat-form-field>
             </div>
-            <div formArrayName="answer">
-              <div *ngFor="let answer of info?.controls?.answer?.controls let answerIndex = index" class="answer-row">
-                <div [formGroupName]="answerIndex">
-                  <mat-form-field  style="font-size: 15px; margin: 0px; min-width: 73%">
-                    <input matInput placeholder="Enter your answer.." formControlName="answerDetails">
-                  </mat-form-field>
-                </div>
-                <div style="display: flex;align-items: flex-start;justify-content: start;min-width: 27%;">
-                  <mat-icon *ngIf="info?.get('answerType')?.value !== 'textBox'" style="cursor: pointer; "
-                    (click)="onDeleteAnswer(index, answerIndex)">
-                    delete
-                  </mat-icon>
+            <div style="display: flex;justify-content: center;flex-direction: row;">
+              <div formArrayName="answer" style="min-width: 70%">
+                <div *ngFor="let answer of info?.controls?.answer?.controls let answerIndex = index" class="answer-row">
+                  <div [formGroupName]="answerIndex"
+                    style="min-width: 73%;display: flex;align-items: center;justify-content: center;">
+                    <mat-form-field style="font-size: 15px; margin: 0px; min-width: 73%">
+                      <input matInput placeholder="Enter your answer.." formControlName="answerDetails">
+                    </mat-form-field>
+                  </div>
+                  <div style="display: flex;align-items: center;justify-content: start;min-width: 27%;">
+                    <mat-icon
+                      *ngIf="info?.get('answerType')?.value !== 'textBox' && info?.get('answerType')?.value !== 'emailId' "
+                      style="cursor: pointer; " (click)="onDeleteAnswer(index, answerIndex)">
+                      delete
+                    </mat-icon>
+                  </div>
                 </div>
               </div>
+              <div style="min-width: 30%; display: flex;justify-content: center;padding-top: 18px">
+                <mat-checkbox style="width: 100%;" formControlName="isRequired">
+                  is required ?
+                </mat-checkbox>
+              </div>
             </div>
-            <div style="display: flex;align-items: center;justify-content: center;width: 73%;">
-              <mat-icon *ngIf="info?.get('answerType')?.value && info?.get('answerType')?.value !== 'textBox'"
+            <div style="display: flex;align-items: center;justify-content: center;width: 50%;">
+              <mat-icon
+                *ngIf="info?.get('answerType')?.value && info?.get('answerType')?.value !== 'textBox' && info?.get('answerType')?.value && info?.get('answerType')?.value !== 'emailId'"
                 style="cursor: pointer;" (click)="onAnswerAddition(index)">
                 add_circle
               </mat-icon>
             </div>
             <hr style="border: 1px solid #b0b0b08f; width: 100%;">
             <div style="display: flex;align-items: end;justify-content: end;">
-              <mat-icon (click)="onFormDeletion(index)" style="cursor: pointer;">delete</mat-icon>
+              <mat-icon (click)="onFormDeletion(index, info?.get('answerType')?.value === 'emailId')"
+                style="cursor: pointer;">delete</mat-icon>
             </div>
           </mat-card>
         </div>
@@ -63,4 +75,44 @@
   <mat-icon class="add-form" (click)="onFormAddition()">
     add_circle
   </mat-icon>
+  <mat-icon class="form-settings" (click)="openSettingsDialog()">
+    settings
+  </mat-icon>
 </mat-card>
+
+<ng-template #formSettings>
+  <h5 mat-dialog-title
+    style="height: 5%;display: flex;flex-direction: row; padding: 20px;background-color: var(--primary-theme-color);color: white;">
+    <span style="min-width: 94%;font-size: 20px;font-weight: 500;">Form Settings</span>
+    <mat-icon style="min-width: 6%;display: flex;align-items: center;justify-content: center;cursor: pointer;"
+      data-control="Dialog-close" (click)="closeDialog()" [matTooltip]="'close'">close</mat-icon>
+  </h5>
+  <form [formGroup]="settingsForm" style="padding: 20px;display: flex;flex-direction: column;display: flex; gap: 20px;">
+    <div>
+      <p style="font-size: 16px;font-weight: 400;">Header message after form submission :</p>
+      <mat-form-field style="margin-left: 40px;">
+        <textarea matInput formControlName="submissionHeader" placeholder="Enter the header.."></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <p style="font-size: 16px;font-weight: 400;">Message after form submission :</p>
+      <mat-form-field style="margin-left: 40px;">
+        <textarea matInput formControlName="submissionMessage" placeholder="Enter the message.."></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-checkbox style="width: 100%;" formControlName="allowMultipleResponse">
+        <p style="font-size: 16px;font-weight: 400; margin: 0px;"> Allow multiple submissions</p>
+      </mat-checkbox>
+    </div>
+    @if(formId){
+      <div style="display: flex;justify-content: end;">
+        <button mat-flat-button style="background-color: var(--primary-theme-color)!important;
+            color: white!important;" (click)="onSettingsSave();">
+          Save
+        </button>
+      </div>
+    }
+    
+  </form>
+</ng-template>

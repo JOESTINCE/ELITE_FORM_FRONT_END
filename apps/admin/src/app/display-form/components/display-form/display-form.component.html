@@ -1,53 +1,81 @@
 <div style="padding: 30px;">
-  <mat-card class="form-page-container" *ngIf="form">
+  <mat-card class="form-page-container">
           <div #scrollTop></div>
     <mat-card class="form-header-card">
       <div class="form-header-div">
-        <h1 class="form-header">{{formData.title}}</h1>
+        <h1 class="form-header">{{formData?.title}}</h1>
       </div>
       <hr class="form-desc-seperator">
       <div class="form-description-div">
-        <h3 class="form-description">{{formData.description}}</h3>
+        <h3 class="form-description">{{formData?.description}}</h3>
       </div>
     </mat-card>
+    @if(!isSubmitted && form){
     <form [formGroup]="form" class="form-div">
       <div formArrayName="items" class="form-array-div">
         <div *ngFor="let formData of form.get('items').controls; let index = index" [formGroupName]="index"
           class="form-group-div">
           <mat-card class="form-details-card">
             <div>
-              <h4 class="form-question">{{formData.get('question').value}}</h4>
+              <h4 class="form-question">{{formData?.get('isRequired')?.value ? formData?.get('question')?.value + ' '+ '*' : formData?.get('question')?.value}}</h4>
             </div>
-            @if(formData.get('answerType').value === 'textBox'){
+            @if(formData.get('answerType').value === 'textBox' || formData.get('answerType').value === 'emailId'){
             <div class="form-text-box-div">
               <mat-form-field class="form-text-box">
                 <textarea matInput placeholder="Enter your answer here..." formControlName="userAnswer"></textarea>
+                <mat-error *ngIf="formData.get('userAnswer')?.hasError('required')">
+                  This field is required!
+                </mat-error>
+                <mat-error *ngIf="formData.get('userAnswer')?.hasError('emailTaken')">
+                  This email ID already exist!
+                </mat-error>
               </mat-form-field>
             </div>
             }
-            @if(formData.get('answerType').value === 'radio' && formData.get('options').length){
+            @if(formData.get('answerType').value === 'radio' && formData.get('answer').length){
             <mat-radio-group formControlName="userAnswer" class="form-radio-div">
-              @for (answers of formData.get('options').controls; track answers) {
-              <mat-radio-button [value]="answers.get('option').value">{{answers.get('option').value}}</mat-radio-button>
+              @for (answers of formData.get('answer').controls; track answers) {
+              <mat-radio-button [value]="answers.get('answerDetails').value">{{answers.get('answerDetails').value}}</mat-radio-button>
               }
+              <mat-error *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
+                This field is required!
+              </mat-error>
             </mat-radio-group>
             }
-            @if(formData.get('answerType').value === 'checkBox' && formData.get('options').length){
-            <div class="form-check-box-div" formArrayName="options">
-              <div *ngFor="let answers of formData.get('options').controls; let i=index" [formGroupName]="i">
-                <mat-checkbox formControlName="option"
-                  (change)="ohCheckBoxChange($event.checked, index, i)">{{answers.get('value').value}}</mat-checkbox>
+            @if(formData.get('answerType').value === 'checkBox' && formData.get('answer').length){
+            <div class="form-check-box-div" formArrayName="answer">
+              <div *ngFor="let answers of formData.get('answer').controls; let i=index" [formGroupName]="i">
+                <mat-checkbox formControlName="value"
+                  (change)="ohCheckBoxChange($event.checked, index, i)">{{answers.get('answerDetails').value}}</mat-checkbox>
               </div>
+              <mat-error *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
+                This field is required!
+              </mat-error>
             </div>
             }
           </mat-card>
         </div>
       </div>
     </form>
-    <div class="form-submit-button-div">
-      <button mat-flat-button class="form-submi-button" (click)="onFormSubmit();">
-        submit
-      </button>
-    </div>
+    @if(!isFromFormList ){
+      <div class="form-submit-button-div">
+        <button mat-flat-button class="form-submi-button" (click)="onFormSubmit();">
+          submit
+        </button>
+      </div>
+    }
+    }
+    @else{
+      <mat-card class="form-header-card" style="padding: 20px ;gap: 20px" >
+        <h2 style="margin: 0px;">{{formSettings.submissionHeader}}</h2>
+        <h4> {{formSettings.submissionMessage}}</h4>
+        @if(formSettings.allowMultipleResponse){
+            <button mat-flat-button class="form-submi-button">
+              Submit another Response
+            </button>
+        }       
+      </mat-card>
+    }
   </mat-card>
+
 </div>
