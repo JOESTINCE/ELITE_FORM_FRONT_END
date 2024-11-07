@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/components/dashboard/dashboard.c
 import { CommonChartComponent } from './common-components/components/common-chart/common-chart.component';
 import { SignUpComponent } from './authentication/components/sign-up/sign-up.component';
 import { ResponseListComponent } from './forms/components/response-list/response-list.component';
+import { FormEditorComponent } from './forms/components/form-editor/form-editor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -21,7 +22,9 @@ const routes: Routes = [
   ]},
   { path: 'form/:id', component: DisplayFormComponent },
   {path:'signin', component: SignInComponent},
-  { path: 'signup', component: SignUpComponent }
+  { path: 'signup', component: SignUpComponent },
+  { path: 'editor', component: FormEditorComponent }
+
 ];
 
 @NgModule({

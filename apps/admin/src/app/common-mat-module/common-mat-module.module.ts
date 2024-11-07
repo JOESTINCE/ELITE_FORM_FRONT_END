@@ -19,6 +19,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDrag } from '@angular/cdk/drag-drop';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { MatSliderModule } from '@angular/material/slider';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -42,6 +47,10 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
     MatTooltipModule,
     MatAccordion,
     MatExpansionModule,
+    DragDropModule,
+    CdkDrag,
+    ColorPickerModule,
+    MatSliderModule,
   ],
   exports:[
     CommonModule,
@@ -64,6 +73,10 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
     MatTooltipModule,
     MatAccordion,
     MatExpansionModule,
+    DragDropModule,
+    CdkDrag,
+    ColorPickerModule,
+    MatSliderModule,
   ]
 })
 export class CommonMatModuleModule { }

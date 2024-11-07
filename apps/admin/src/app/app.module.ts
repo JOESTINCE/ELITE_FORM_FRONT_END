@@ -21,6 +21,7 @@ import { httpReqResInterceptor } from './authentication/services/http.intercepto
 import { CommonButtonLoaderComponent } from './common-components/components/common-button-loader/common-button-loader.component';
 import { CommonPageLoaderComponent } from './common-components/components/common-page-loader/common-page-loader.component';
 import { ResponseListComponent } from './forms/components/response-list/response-list.component';
+import { FormEditorComponent } from './forms/components/form-editor/form-editor.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ResponseListComponent } from './forms/components/response-list/response
     SignUpComponent,
     CommonButtonLoaderComponent,
     CommonPageLoaderComponent,
-    ResponseListComponent
+    ResponseListComponent,
+    FormEditorComponent
   ],
   imports: [
     BrowserModule,

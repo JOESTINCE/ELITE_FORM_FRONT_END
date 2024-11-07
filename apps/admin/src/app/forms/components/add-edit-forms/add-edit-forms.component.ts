@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonServiceService } from '../../../common-components/services/common-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-add-edit-forms',
@@ -257,6 +258,14 @@ export class AddEditFormsComponent {
         }
       }))
     }
+  }
+  drop(event: any) {
+    const previousIndex = event.previousIndex;
+    const currentIndex = event.currentIndex;
+    let items = this.form.get('items') as FormArray
+    const control = items.at(previousIndex);
+    items.removeAt(previousIndex);
+    items.insert(currentIndex, control);
   }
   ngOnDestroy(){
     this.subscriptionObj.unsubscribe();

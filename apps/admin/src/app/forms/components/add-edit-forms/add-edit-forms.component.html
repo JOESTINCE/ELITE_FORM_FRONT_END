@@ -12,10 +12,10 @@
         </mat-form-field>
       </mat-card>
     </div>
-    <div formArrayName='items' style="min-width: 100%;">
+    <div formArrayName='items' style="min-width: 100%;" cdkDropList (cdkDropListDropped)="drop($event)">
       <div *ngFor="let info of form.get('items').controls; let index = index"
-        style="display: flex;align-items: center;justify-content: center;min-width: 100%;">
-        <div [formGroupName]="index" style="min-width: 100%;display: flex;justify-content: center;">
+        style="display: flex;align-items: center;justify-content: center;min-width: 100%" cdkDrag [cdkDragData]="info">
+        <div [formGroupName]="index" style="min-width: 100%;display: flex;justify-content: center">
           <mat-card class="form-title-card">
             <div class="question-row">
               <mat-form-field style="font-size: 25px; width:75%">
@@ -49,10 +49,13 @@
                   </div>
                 </div>
               </div>
-              <div style="min-width: 30%; display: flex;justify-content: center;padding-top: 18px">
-                <mat-checkbox style="width: 100%;" formControlName="isRequired">
+              <div style="min-width: 30%; display: flex;align-items:center;padding-top: 18px; flex-direction: column;gap: 20px">
+                <mat-checkbox style="width: 100%;display: flex;align-items: center;justify-content: center;" formControlName="isRequired">
                   is required ?
                 </mat-checkbox>
+                <mat-icon matTooltip="Drag & Drop" style="cursor: pointer;" cdkDragHandle>
+                  open_with
+                </mat-icon>
               </div>
             </div>
             <div style="display: flex;align-items: center;justify-content: center;width: 50%;">

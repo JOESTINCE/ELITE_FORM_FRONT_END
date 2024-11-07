@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DisplayFormService } from '../../services/display-form.service';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AsyncValidator } from '../../../common-components/services/async-validator';
 import { CommonServiceService } from '../../../common-components/services/common-service.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-display-form',
@@ -30,13 +31,40 @@ export class DisplayFormComponent {
   subscriptionObj: Subscription = new Subscription();
   @Input() formId: any;
   @Input() isFromFormList!: boolean;
+  @Input() isFromEditor!: boolean
+  @Input() globalStyle: any;
   // @ViewChild('scrollTop') scrollTop!: ElementRef;  // Element to focus after disable
+  dialogRef!: MatDialogRef<any>;
+  @ViewChild('formEditor') formEditor!: TemplateRef<any>;
+  editorMenu: String='question';
+  questionFontColor: any= '#ff0000'; // Default color
+  questionBackgroundColor: any ='#0035ff';
+  answerFontColor: any = '#ff0000'; // Default color
+  answerBackgroundColor: any = '#0035ff';
+  editorIndex: number = -1;
+  previousGlobalStyle: {
+    cardBackGroundColor: string,
+    borderLeftTopRadius: string,
+    borderRightTopRadius: string,
+    borderRightBottomRadius: string,
+    borderLeftBottomRadius: string,
+  } = {
+      cardBackGroundColor: '',
+      borderLeftTopRadius: '',
+      borderRightTopRadius: '',
+      borderRightBottomRadius: '',
+      borderLeftBottomRadius: '',
+  }
+
+
+
   constructor(
     private displayFormService: DisplayFormService,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
     private asyncValidator: AsyncValidator,
-    private commonService: CommonServiceService
+    private commonService: CommonServiceService,
+    private dialog: MatDialog
   ){
 
   }
@@ -95,7 +123,16 @@ export class DisplayFormComponent {
     }))
   }
   initializeForm(){
-    this.form = new FormGroup({items : new FormArray([])});
+    this.form = new FormGroup({
+      items : new FormArray([]),
+      globalStyle: new FormGroup({
+        cardBackGroundColor: new FormControl(this.formData?.globalStyle?.cardBackGroundColor ?? 'white'),
+        borderLeftTopRadius: new FormControl(this.formData?.globalStyle?.borderLeftTopRadius ?? '4'),
+        borderRightTopRadius: new FormControl(this.formData?.globalStyle?.borderRightTopRadius ?? '4'),
+        borderRightBottomRadius: new FormControl(this.formData?.globalStyle?.borderRightBottomRadius ?? '4'),
+        borderLeftBottomRadius: new FormControl(this.formData?.globalStyle?.borderLeftBottomRadius ?? '4'),
+        
+      })});
     if(this.formData?.items?.length){
      for(let i=0; i<this.formData.items.length; i++){
        let items = this.form.get('items') as FormArray
@@ -112,7 +149,30 @@ export class DisplayFormComponent {
          answerType: new FormControl(this.formData?.items?.[i]?.answerType),
          isRequired: new FormControl(this.formData?.items?.[i]?.isRequired),
           userAnswer: new FormControl(this.isFromFormList ? this.formData?.items?.[i]?.userAnswer : null, answerValidator, asyncValidator),
-          answer: new FormArray([])
+          answer: new FormArray([]),
+        style: new FormGroup({
+          questionFontSize: new FormControl(this.formData?.items?.[i]?.style?.questionFontSize ?? '20'),
+          questionFontFamily: new FormControl(this.formData?.items?.[i]?.style?.questionFontFamily ?? 'Roboto, sans-serif'),
+          questionFontColor: new FormControl(this.formData?.items?.[i]?.style?.questionFontColor ?? 'black'),
+          questionBackGroundColor: new FormControl(this.formData?.items?.[i]?.style?.questionBackGroundColor ?? 'white'),
+          answerFontSize: new FormControl(this.formData?.items?.[i]?.style?.answerFontSize ?? '14'),
+          answerFontFamily: new FormControl(this.formData?.items?.[i]?.style?.answerFontFamily ?? 'Roboto, sans-serif'),
+          answerFontColor: new FormControl(this.formData?.items?.[i]?.style?.answerFontColor ?? 'black'),
+          answerBackGroundColor: new FormControl(this.formData?.items?.[i]?.style?.answerBackGroundColor ?? 'white'),
+          borderLeftWidth: new FormControl(this.formData?.items?.[i]?.style?.borderLeftWidth ?? '5'),
+          borderLeftColor: new FormControl(this.formData?.items?.[i]?.style?.borderLeftColor ?? 'var(--primary-theme-color)'),
+          borderTopWidth: new FormControl(this.formData?.items?.[i]?.style?.borderTopWidth ?? '0'),
+          borderTopColor: new FormControl(this.formData?.items?.[i]?.style?.borderTopColor ?? 'white'),
+          borderRightWidth: new FormControl(this.formData?.items?.[i]?.style?.borderRightWidth ?? '0'),
+          borderRightColor: new FormControl(this.formData?.items?.[i]?.style?.borderRightColor ?? 'white'),
+          borderBottomWidth: new FormControl(this.formData?.items?.[i]?.style?.borderBottomWidth ?? '0'),
+          borderBottomColor: new FormControl(this.formData?.items?.[i]?.style?.borderBottomColor ?? 'white'),
+          cardColor: new FormControl(this.formData?.items?.[i]?.style?.cardColor ?? 'white'),
+          borderLeftTopRadius: new FormControl(this.formData?.items?.[i]?.style?.borderLeftTopRadius ?? '4'),
+          borderRightTopRadius: new FormControl(this.formData?.items?.[i]?.style?.borderRightTopRadius ?? '4'),
+          borderRightBottomRadius: new FormControl(this.formData?.items?.[i]?.style?.borderRightBottomRadius ?? '4'),
+          borderLeftBottomRadius: new FormControl(this.formData?.items?.[i]?.style?.borderLeftBottomRadius ?? '4'),
+        })
        }))
        if(this.formData?.items?.[i]?.answer?.length){
          for (let j = 0; j < this.formData.items[i].answer.length; j++){
@@ -133,7 +193,7 @@ export class DisplayFormComponent {
        }
      }
     }
-    if(this.isFromFormList){
+    if(this.isFromFormList || this.isFromEditor){
       this.form.disable();
       // this.scrollTop.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }
@@ -179,6 +239,60 @@ export class DisplayFormComponent {
       }
     }
       ((this.form.get('items') as FormArray).at(outerIndex) as FormGroup).get('userAnswer')?.setValue(userAnswer);
+  }
+  openEditorControls(index: any){
+    this.dialog.closeAll();
+    console.log('Open editor Controls function called')
+    if(this.isFromEditor){
+      (this.form.get('items') as FormArray).at(index).get('style')?.enable();      
+      this.editorIndex = index;
+      let enterAnimationDuration = '300ms';
+      let exitAnimationDuration = '300ms';
+      this.dialogRef = this.dialog.open(this.formEditor, {
+        width: '400px',
+        enterAnimationDuration,
+        exitAnimationDuration,
+        position: {
+          top: '9%',    // distance from the top
+          right: '0%'   // distance from the left
+        },
+        disableClose: false,
+        // restoreFocus: false,
+        hasBackdrop: false
+      });
+    }
+  }
+  closeDialog(){
+    this.dialog.closeAll();
+    this.editorIndex = -1
+  }
+  onEditorMenuClick(menu: String){
+    this.editorMenu = menu
+    console.log(menu);
+  }
+  ngDoCheck(): void {
+    if (this.isFromEditor ){
+      if (this.globalStyle?.cardBackGroundColor && this.globalStyle.cardBackGroundColor !== this.previousGlobalStyle.cardBackGroundColor && this.form?.get(['globalStyle', 'cardBackGroundColor'])?.value) {
+        (this.form.get(['globalStyle', 'cardBackGroundColor']) as FormGroup).setValue(this.globalStyle.cardBackGroundColor);
+        this.previousGlobalStyle.cardBackGroundColor = this.globalStyle.cardBackGroundColor;
+      }
+      if (this.globalStyle?.borderLeftTopRadius && this.globalStyle.borderLeftTopRadius !== this.previousGlobalStyle.borderLeftTopRadius && this.form?.get(['globalStyle', 'borderLeftTopRadius'])?.value) {
+        (this.form.get(['globalStyle', 'borderLeftTopRadius']) as FormGroup).setValue(this.globalStyle.borderLeftTopRadius);
+        this.previousGlobalStyle.borderLeftTopRadius = this.globalStyle.borderLeftTopRadius;
+      }
+      if (this.globalStyle?.borderRightTopRadius && this.globalStyle.borderRightTopRadius !== this.previousGlobalStyle.borderRightTopRadius && this.form?.get(['globalStyle', 'borderRightTopRadius'])?.value) {
+        (this.form.get(['globalStyle', 'borderRightTopRadius']) as FormGroup).setValue(this.globalStyle.borderRightTopRadius);
+        this.previousGlobalStyle.borderRightTopRadius = this.globalStyle.borderRightTopRadius;
+      }
+      if (this.globalStyle?.borderRightBottomRadius && this.globalStyle.borderRightBottomRadius !== this.previousGlobalStyle.borderRightBottomRadius && this.form?.get(['globalStyle', 'borderRightBottomRadius'])?.value) {
+        (this.form.get(['globalStyle', 'borderRightBottomRadius']) as FormGroup).setValue(this.globalStyle.borderRightBottomRadius);
+        this.previousGlobalStyle.borderRightBottomRadius = this.globalStyle.borderRightBottomRadius;
+      }
+      if (this.globalStyle?.borderLeftBottomRadius && this.globalStyle.borderLeftBottomRadius !== this.previousGlobalStyle.borderLeftBottomRadius && this.form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value) {
+        (this.form.get(['globalStyle', 'borderLeftBottomRadius']) as FormGroup).setValue(this.globalStyle.borderLeftBottomRadius);
+        this.previousGlobalStyle.borderLeftBottomRadius = this.globalStyle.borderLeftBottomRadius;
+      }
+    }
   }
   ngOnDestroy(){
     this.subscriptionObj.unsubscribe();

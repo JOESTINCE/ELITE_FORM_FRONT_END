@@ -65,6 +65,7 @@ export class ResponseListComponent {
       next: (res: any) => {
         if (res?.data?.count && res?.data?.rows) {
           this.tableData = res.data.rows;
+          this.length = res?.data?.count
         }
       },
       error: () => {

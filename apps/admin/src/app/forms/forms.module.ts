@@ -6,6 +6,7 @@ import { CommonMatModuleModule } from '../common-mat-module/common-mat-module.mo
 import { CommonComponentsModule } from '../common-components/common-components.module';
 import { ResponseListComponent } from './components/response-list/response-list.component';
 import { DatePipe } from '@angular/common';
+import { FormEditorComponent } from './components/form-editor/form-editor.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { DatePipe } from '@angular/common';
     AddEditFormsComponent,
     FormsListComponent,
     ResponseListComponent,
+    FormEditorComponent,
   ],
   imports: [
     CommonModule,

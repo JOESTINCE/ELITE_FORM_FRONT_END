@@ -1,6 +1,14 @@
 <div style="padding: 30px;">
-  <mat-card class="form-page-container">
-          <div #scrollTop></div>
+  <div class="form-page-container" 
+  [ngStyle]="{
+    'background-color' : form?.get(['globalStyle', 'cardBackGroundColor'])?.value ?? 'white',
+    'border-top-left-radius': form?.get(['globalStyle', 'borderLeftTopRadius'])?.value ?form?.get(['globalStyle', 'borderLeftTopRadius'])?.value+'px' : '4px',
+    'border-top-right-radius': form?.get(['globalStyle', 'borderRightTopRadius'])?.value ?form?.get(['globalStyle', 'borderRightTopRadius'])?.value+'px' : '4px',
+    'border-bottom-right-radius': form?.get(['globalStyle', 'borderRightBottomRadius'])?.value ?form?.get(['globalStyle', 'borderRightBottomRadius'])?.value+'px' : '4px',
+    'border-bottom-left-radius': form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value ?form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value+'px' : '4px',
+  }"
+  >
+    <div #scrollTop></div>
     <mat-card class="form-header-card">
       <div class="form-header-div">
         <h1 class="form-header">{{formData?.title}}</h1>
@@ -14,10 +22,33 @@
     <form [formGroup]="form" class="form-div">
       <div formArrayName="items" class="form-array-div">
         <div *ngFor="let formData of form.get('items').controls; let index = index" [formGroupName]="index"
-          class="form-group-div">
-          <mat-card class="form-details-card">
+          class="form-group-div" [ngStyle]="{'cursor': isFromEditor ? 'pointer': '' }"
+          (click)="openEditorControls(index)">
+          <div [ngClass]="{'form-details-card-selected': editorIndex == index, 'form-details-card-unselected': editorIndex !== index && editorIndex!==-1, 'form-details-card': editorIndex==-1}"
+                [ngStyle]="{
+                'border-left-width'  : formData?.get('style.borderLeftWidth')?.value ? formData?.get('style.borderLeftWidth')?.value+'px' : '5px',
+                'border-left-color'  : formData?.get('style.borderLeftColor')?.value ?? 'var(--primary-theme-color)',
+                'border-top-width'   : formData?.get('style.borderTopWidth')?.value ? formData?.get('style.borderTopWidth')?.value+'px' : '0px',
+                'border-top-color'   : formData?.get('style.borderTopColor')?.value ?? 'white',
+                'border-right-width' : formData?.get('style.borderRightWidth')?.value ? formData?.get('style.borderRightWidth')?.value+'px' : '0px',
+                'border-right-color' : formData?.get('style.borderRightColor')?.value ?? 'white',
+                'border-bottom-width': formData?.get('style.borderBottomWidth')?.value ? formData?.get('style.borderBottomWidth')?.value+'px' : '0px',
+                'border-bottom-color': formData?.get('style.borderBottomColor')?.value ?? 'white',
+                'background-color'   : formData?.get('style.cardColor')?.value ?? 'white',
+                'border-top-left-radius': formData?.get('style.borderLeftTopRadius')?.value ? formData?.get('style.borderLeftTopRadius')?.value+'px' : '4px',
+                'border-top-right-radius': formData?.get('style.borderRightTopRadius')?.value ? formData?.get('style.borderRightTopRadius')?.value+'px' : '4px',
+                'border-bottom-right-radius': formData?.get('style.borderRightBottomRadius')?.value ? formData?.get('style.borderRightBottomRadius')?.value+'px' : '4px',
+                'border-bottom-left-radius': formData?.get('style.borderLeftBottomRadius')?.value ? formData?.get('style.borderLeftBottomRadius')?.value+'px' : '4px',
+               }">
             <div>
-              <h4 class="form-question">{{formData?.get('isRequired')?.value ? formData?.get('question')?.value + ' '+ '*' : formData?.get('question')?.value}}</h4>
+              <h4 class="form-question" [ngStyle]="{
+                'color': formData?.get('style.questionFontColor')?.value ?? 'black',
+                'background-color' : formData?.get('style.questionBackGroundColor')?.value ?? 'white',
+                'font-size':  formData?.get('style.questionFontSize')?.value ? formData?.get('style.questionFontSize')?.value+'px' : '20px',
+                'font-family' : formData?.get('style.questionFontFamily')?.value ?? 'Roboto, sans-serif' }">
+                {{formData?.get('isRequired')?.value ? formData?.get('question')?.value + ' '+ '*' :
+                formData?.get('question')?.value}}
+              </h4>
             </div>
             @if(formData.get('answerType').value === 'textBox' || formData.get('answerType').value === 'emailId'){
             <div class="form-text-box-div">
@@ -33,11 +64,21 @@
             </div>
             }
             @if(formData.get('answerType').value === 'radio' && formData.get('answer').length){
-            <mat-radio-group formControlName="userAnswer" class="form-radio-div">
+            <mat-radio-group formControlName="userAnswer" class="form-radio-div" [ngStyle]="{
+                }">
               @for (answers of formData.get('answer').controls; track answers) {
-              <mat-radio-button [value]="answers.get('answerDetails').value">{{answers.get('answerDetails').value}}</mat-radio-button>
+              <mat-radio-button [value]="answers.get('answerDetails').value">
+                <span [ngStyle]="{
+                'color': formData?.get('style.answerFontColor')?.value ?? 'black',
+                'font-size':  formData?.get('style.answerFontSize')?.value ? formData?.get('style.answerFontSize')?.value+'px' : '20px',
+                'font-family' : formData?.get('style.answerFontFamily')?.value ?? 'Roboto, sans-serif',
+                'background-color' : formData?.get('style.answerBackGroundColor')?.value ?? 'white' }">
+                  {{answers.get('answerDetails').value}}
+                </span>
+              </mat-radio-button>
               }
-              <mat-error *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
+              <mat-error
+                *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
                 This field is required!
               </mat-error>
             </mat-radio-group>
@@ -45,37 +86,310 @@
             @if(formData.get('answerType').value === 'checkBox' && formData.get('answer').length){
             <div class="form-check-box-div" formArrayName="answer">
               <div *ngFor="let answers of formData.get('answer').controls; let i=index" [formGroupName]="i">
-                <mat-checkbox formControlName="value"
-                  (change)="ohCheckBoxChange($event.checked, index, i)">{{answers.get('answerDetails').value}}</mat-checkbox>
+                <mat-checkbox formControlName="value" (change)="ohCheckBoxChange($event.checked, index, i)">
+                  <span [ngStyle]="{
+                      'color': formData?.get('style.answerFontColor')?.value ?? 'black',
+                      'font-size':  formData?.get('style.answerFontSize')?.value ? formData?.get('style.answerFontSize')?.value+'px' : '20px',
+                      'font-family' : formData?.get('style.answerFontFamily')?.value ?? 'Roboto, sans-serif',
+                      'background-color' : formData?.get('style.answerBackGroundColor')?.value ?? 'white' }">
+                    {{answers.get('answerDetails').value}}
+                  </span>
+                </mat-checkbox>
               </div>
-              <mat-error *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
+              <mat-error
+                *ngIf="formData.get('userAnswer')?.hasError('required') && formData.get('userAnswer')?.touched">
                 This field is required!
               </mat-error>
             </div>
             }
-          </mat-card>
+          </div>
         </div>
       </div>
     </form>
-    @if(!isFromFormList ){
-      <div class="form-submit-button-div">
-        <button mat-flat-button class="form-submi-button" (click)="onFormSubmit();">
-          submit
-        </button>
-      </div>
+    @if(!isFromFormList && !isFromEditor ){
+    <div class="form-submit-button-div">
+      <button mat-flat-button class="form-submi-button" (click)="onFormSubmit();">
+        submit
+      </button>
+    </div>
     }
     }
     @else{
-      <mat-card class="form-header-card" style="padding: 20px ;gap: 20px" >
-        <h2 style="margin: 0px;">{{formSettings.submissionHeader}}</h2>
-        <h4> {{formSettings.submissionMessage}}</h4>
-        @if(formSettings.allowMultipleResponse){
-            <button mat-flat-button class="form-submi-button">
-              Submit another Response
-            </button>
-        }       
-      </mat-card>
+    <mat-card class="form-header-card" style="padding: 20px ;gap: 20px">
+      <h2 style="margin: 0px;">{{formSettings.submissionHeader}}</h2>
+      <h4> {{formSettings.submissionMessage}}</h4>
+      @if(formSettings.allowMultipleResponse){
+      <button mat-flat-button class="form-submi-button">
+        Submit another Response
+      </button>
+      }
+    </mat-card>
     }
-  </mat-card>
+  </div>
 
 </div>
+<ng-template #formEditor>
+  <div cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <h5 mat-dialog-title cdkDragHandle
+      style="margin:0px;height: 5%;display: flex;flex-direction: row; padding: 20px;background-color: var(--primary-theme-color);color: white;cursor:move">
+      <span style="min-width: 94%;font-size: 20px;font-weight: 500;">Form Editor</span>
+      <mat-icon style="min-width: 6%;display: flex;align-items: center;justify-content: center;cursor: pointer;"
+        data-control="Dialog-close" (click)="closeDialog()" [matTooltip]="'close'">close</mat-icon>
+    </h5>
+
+    <div class="editor-dialog-content-div">
+      <div class="menu-div">
+        <span></span>
+        <span [ngClass]="{'menu-selected': editorMenu =='question', 'menus': editorMenu !=='question'}"
+          (click)="onEditorMenuClick('question')">Question</span>
+        <span [ngClass]="{'menu-selected': editorMenu =='answer', 'menus': editorMenu !=='answer'}"
+          (click)="onEditorMenuClick('answer')">Answer</span>
+        <span [ngClass]="{'menu-selected': editorMenu =='border', 'menus': editorMenu !=='border'}"
+          (click)="onEditorMenuClick('border')">Border</span>
+        <span [ngClass]="{'menu-selected': editorMenu =='card', 'menus': editorMenu !=='card'}"
+          (click)="onEditorMenuClick('card')">Card</span>
+      </div>
+      <div class="settings-div">
+        @if(editorMenu==='question' && form.get(['items', editorIndex, 'style'])){
+        <div class="background-settings-div">
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Font size in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'questionFontSize'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Font size
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'questionFontSize']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'questionFontSize'])" #slider>
+            </mat-slider>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Font Family</mat-label>
+            <input matInput placeholder="Ex. Roboto"
+              [formControl]="form.get(['items', editorIndex, 'style', 'questionFontFamily'])">
+          </mat-form-field>
+          <div class="question-font-color-picker-div">
+            <span class="question-font-color-picker-label">
+              Font color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'questionFontColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'questionFontColor']).value">
+            </div>
+          </div>
+          <div class="question-background-color-picker-div">
+            <span class="question-background-color-picker-label">
+              Background color
+            </span>
+            <div class="question-background-color-picker-input"
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'questionBackGroundColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'questionBackGroundColor']).value">
+            </div>
+          </div>
+        </div>
+        }
+        @if(editorMenu==='answer' && form.get(['items', editorIndex, 'style'])){
+        <div class="background-settings-div">
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Font size in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'answerFontSize'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Font size
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'answerFontSize']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'answerFontSize'])" #slider>
+            </mat-slider>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Font Family</mat-label>
+            <input matInput placeholder="Ex. Roboto"
+              [formControl]="form.get(['items', editorIndex, 'style', 'answerFontFamily'])">
+          </mat-form-field>
+          <div class="question-font-color-picker-div">
+            <span class="question-font-color-picker-label">
+              Font color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'answerFontColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'answerFontColor']).value">
+            </div>
+          </div>
+          <div class="question-background-color-picker-div">
+            <span class="question-background-color-picker-label">
+              Background color
+            </span>
+            <div class="question-background-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'answerBackGroundColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'answerBackGroundColor']).value">
+            </div>
+          </div>
+        </div>
+        }
+        @if(editorMenu==='border' && form.get(['items', editorIndex, 'style'])){
+        <div class="background-settings-div">
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Top width in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderTopWidth'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Top width
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderTopWidth']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderTopWidth'])" #slider>
+            </mat-slider>
+          </div>
+          <div class="question-font-color-picker-div" style="margin-bottom: 20px;">
+            <span class="question-font-color-picker-label">
+              Top color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'borderTopColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'borderTopColor']).value">
+            </div>
+          </div>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Right width in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderRightWidth'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Right width
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderRightWidth']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderRightWidth'])" #slider>
+            </mat-slider>
+          </div>
+          <div class="question-font-color-picker-div" style="margin-bottom: 20px;">
+            <span class="question-font-color-picker-label">
+              Right color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'borderRightColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'borderRightColor']).value">
+            </div>
+          </div>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Bottom width in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderBottomWidth'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Bottom width
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderBottomWidth']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderBottomWidth'])" #slider>
+            </mat-slider>
+          </div>
+          <div class="question-font-color-picker-div" style="margin-bottom: 20px;">
+            <span class="question-font-color-picker-label">
+              Bottom color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'borderBottomColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'borderBottomColor']).value">
+            </div>
+          </div>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Left width in px</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftWidth'])">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Left width
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderLeftWidth']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="50" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftWidth'])" #slider>
+            </mat-slider>
+          </div>
+          <div class="question-font-color-picker-div" style="margin-bottom: 20px;">
+            <span class="question-font-color-picker-label">
+              Left color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'borderLeftColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'borderLeftColor']).value">
+            </div>
+          </div>
+        </div>
+        }
+        @if(editorMenu==='card' && form.get(['items', editorIndex, 'style'])){
+        <div class="background-settings-div">
+          <div class="question-font-color-picker-div">
+            <span class="question-font-color-picker-label">
+              Card color
+            </span>
+            <div class="question-font-color-picker-input" matInput
+              [(colorPicker)]="form.get(['items', editorIndex, 'style', 'cardColor']).value"
+              [style.background]="form.get(['items', editorIndex, 'style', 'cardColor']).value">
+            </div>
+          </div>
+          <mat-form-field appearance="outline" style="margin-top: 10px;"> 
+            <mat-label>Left-Top border radius</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftTopRadius'])">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Right-Top border radius</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderRightTopRadius'])">
+          </mat-form-field><mat-form-field appearance="outline">
+            <mat-label>Right-Bottom border radius</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderRightBottomRadius'])">
+          </mat-form-field><mat-form-field appearance="outline">
+            <mat-label>Left-Bottom border radius</mat-label>
+            <input matInput placeholder="Ex. 10" type="number"
+              [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftBottomRadius'])">
+          </mat-form-field>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>

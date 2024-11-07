@@ -24,6 +24,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         --mat-snack-bar-button-color: white;
       }
     }
+         .mat-mdc-slider .mdc-slider__track--active_fill {
+           border-color: var(--primary-theme-color) !important;
+         }
+
+         .mat-mdc-slider .mdc-slider__thumb-knob {
+           background-color: var(--primary-theme-color) !important;
+           border-color: var(--primary-theme-color) !important;
+         }
   // html{
   //   --mdc-list-list-item-label-text-color: white;
   //   --mdc-list-list-item-label-text-weight: 500;
