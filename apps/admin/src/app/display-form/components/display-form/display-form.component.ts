@@ -1,12 +1,13 @@
-import { Component, ElementRef, Input, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { DisplayFormService } from '../../services/display-form.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AsyncValidator } from '../../../common-components/services/async-validator';
 import { CommonServiceService } from '../../../common-components/services/common-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormsService } from '../../../forms/services/forms.service';
 
 @Component({
   selector: 'app-display-form',
@@ -32,7 +33,9 @@ export class DisplayFormComponent {
   @Input() formId: any;
   @Input() isFromFormList!: boolean;
   @Input() isFromEditor!: boolean
-  @Input() globalStyle: any;
+  @Output() globalStyleInitialization = new EventEmitter();
+
+  // @Input() globalStyle: any;
   // @ViewChild('scrollTop') scrollTop!: ElementRef;  // Element to focus after disable
   dialogRef!: MatDialogRef<any>;
   @ViewChild('formEditor') formEditor!: TemplateRef<any>;
@@ -42,19 +45,20 @@ export class DisplayFormComponent {
   answerFontColor: any = '#ff0000'; // Default color
   answerBackgroundColor: any = '#0035ff';
   editorIndex: number = -1;
-  previousGlobalStyle: {
-    cardBackGroundColor: string,
-    borderLeftTopRadius: string,
-    borderRightTopRadius: string,
-    borderRightBottomRadius: string,
-    borderLeftBottomRadius: string,
-  } = {
-      cardBackGroundColor: '',
-      borderLeftTopRadius: '',
-      borderRightTopRadius: '',
-      borderRightBottomRadius: '',
-      borderLeftBottomRadius: '',
-  }
+  // previousGlobalStyle: {
+  //   cardBackGroundColor: string,
+  //   borderLeftTopRadius: string,
+  //   borderRightTopRadius: string,
+  //   borderRightBottomRadius: string,
+  //   borderLeftBottomRadius: string,
+  // } = {
+  //     cardBackGroundColor: '',
+  //     borderLeftTopRadius: '',
+  //     borderRightTopRadius: '',
+  //     borderRightBottomRadius: '',
+  //     borderLeftBottomRadius: '',
+  // }
+  userId = localStorage.getItem('userId');
 
 
 
@@ -64,7 +68,10 @@ export class DisplayFormComponent {
     private snackBar: MatSnackBar,
     private asyncValidator: AsyncValidator,
     private commonService: CommonServiceService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private formService: FormsService,
+    // private cdr: ChangeDetectorRef
   ){
 
   }
@@ -78,7 +85,9 @@ export class DisplayFormComponent {
     else{
       this.getFormDetails();
     }
-
+    if(this.isFromEditor){
+      this.initializeEditorButtonEvent()
+    }
   }
   ngAfterViewInit(){
     const overlaypane: any = document.querySelectorAll('.mdc-form-field');
@@ -91,11 +100,22 @@ export class DisplayFormComponent {
   // ngAfterContentInit (){
   //   this.isFormInitialized = true
   // } 
+  // ngOnChanges(changes: SimpleChanges) {
+  //   // if (changes['editorButtonEvent']) {
+  //     const currentSaveValue = this.editorButtonEvent?.save;
+  //     const previousSaveValue = changes['editorButtonEvent'].previousValue?.save;
+
+  //     if (currentSaveValue !== previousSaveValue) {
+  //       console.log('ButtonClickedFromEditor');
+  //       this.cdr.detectChanges();
+  //     }
+  //   // }
+  // }
 
   getFormDetails(){
     this.subscriptionObj.add(this.displayFormService.getOneForm(this.formId).subscribe({
       next: (res: any) => {
-        if (res?.data?.formData && res?.data?.formSettings) {
+        if (res?.data?.formData) {
           this.formData = res?.data?.formData;
           this.formSettings.submissionHeader = res?.data?.formSettings?.submissionHeader;
           this.formSettings.submissionMessage = res?.data?.formSettings?.submissionMessage;
@@ -124,15 +144,40 @@ export class DisplayFormComponent {
   }
   initializeForm(){
     this.form = new FormGroup({
+      title: new UntypedFormControl(this.formData?.title),
+      description: new UntypedFormControl(this.formData?.description),
+      headerStyle: new FormGroup({
+        headerFontSize: new FormControl(this.formData?.headerStyle?.questionFontSize ?? '20'),
+        headerFontFamily: new FormControl(this.formData?.headerStyle?.questionFontFamily ?? 'Roboto, sans-serif'),
+        headerFontColor: new FormControl(this.formData?.headerStyle?.questionFontColor ?? 'black'),
+        headerBackGroundColor: new FormControl(this.formData?.headerStyle?.questionBackGroundColor ?? 'white'),
+        descriptionFontSize: new FormControl(this.formData?.headerStyle?.answerFontSize ?? '14'),
+        descriptionFontFamily: new FormControl(this.formData?.headerStyle?.answerFontFamily ?? 'Roboto, sans-serif'),
+        descriptionFontColor: new FormControl(this.formData?.headerStyle?.answerFontColor ?? 'black'),
+        descriptionBackGroundColor: new FormControl(this.formData?.headerStyle?.answerBackGroundColor ?? 'white'),
+        borderLeftWidth: new FormControl(this.formData?.headerStyle?.borderLeftWidth ?? '5'),
+        borderLeftColor: new FormControl(this.formData?.headerStyle?.borderLeftColor ?? 'var(--primary-theme-color)'),
+        borderTopWidth: new FormControl(this.formData?.headerStyle?.borderTopWidth ?? '0'),
+        borderTopColor: new FormControl(this.formData?.headerStyle?.borderTopColor ?? 'white'),
+        borderRightWidth: new FormControl(this.formData?.headerStyle?.borderRightWidth ?? '0'),
+        borderRightColor: new FormControl(this.formData?.headerStyle?.borderRightColor ?? 'white'),
+        borderBottomWidth: new FormControl(this.formData?.headerStyle?.borderBottomWidth ?? '0'),
+        borderBottomColor: new FormControl(this.formData?.headerStyle?.borderBottomColor ?? 'white'),
+        cardColor: new FormControl(this.formData?.items?.headerStyle?.cardColor ?? 'white'),
+        borderLeftTopRadius: new FormControl(this.formData?.headerStyle?.borderLeftTopRadius ?? '4'),
+        borderRightTopRadius: new FormControl(this.formData?.headerStyle?.borderRightTopRadius ?? '4'),
+        borderRightBottomRadius: new FormControl(this.formData?.headerStyle?.borderRightBottomRadius ?? '4'),
+        borderLeftBottomRadius: new FormControl(this.formData?.headerStyle?.borderLeftBottomRadius ?? '4'),
+      }),
       items : new FormArray([]),
       globalStyle: new FormGroup({
-        cardBackGroundColor: new FormControl(this.formData?.globalStyle?.cardBackGroundColor ?? 'white'),
+        cardBackGroundColor: new FormControl(this.formData?.globalStyle?.cardBackGroundColor ?? 'red'),
         borderLeftTopRadius: new FormControl(this.formData?.globalStyle?.borderLeftTopRadius ?? '4'),
         borderRightTopRadius: new FormControl(this.formData?.globalStyle?.borderRightTopRadius ?? '4'),
         borderRightBottomRadius: new FormControl(this.formData?.globalStyle?.borderRightBottomRadius ?? '4'),
         borderLeftBottomRadius: new FormControl(this.formData?.globalStyle?.borderLeftBottomRadius ?? '4'),
-        
-      })});
+      })
+    });
     if(this.formData?.items?.length){
      for(let i=0; i<this.formData.items.length; i++){
        let items = this.form.get('items') as FormArray
@@ -195,6 +240,7 @@ export class DisplayFormComponent {
     }
     if(this.isFromFormList || this.isFromEditor){
       this.form.disable();
+      this.globalStyleInitialization.emit(this.form.get('globalStyle').value)
       // this.scrollTop.nativeElement.scrollIntoView({ behavior: 'smooth' });
     }
   }
@@ -270,31 +316,71 @@ export class DisplayFormComponent {
     this.editorMenu = menu
     console.log(menu);
   }
-  ngDoCheck(): void {
-    if (this.isFromEditor ){
-      if (this.globalStyle?.cardBackGroundColor && this.globalStyle.cardBackGroundColor !== this.previousGlobalStyle.cardBackGroundColor && this.form?.get(['globalStyle', 'cardBackGroundColor'])?.value) {
-        (this.form.get(['globalStyle', 'cardBackGroundColor']) as FormGroup).setValue(this.globalStyle.cardBackGroundColor);
-        this.previousGlobalStyle.cardBackGroundColor = this.globalStyle.cardBackGroundColor;
+  // ngDoCheck(): void {
+  //   if (this.isFromEditor ){
+  //     if (this.globalStyle?.cardBackGroundColor && this.globalStyle.cardBackGroundColor !== this.previousGlobalStyle.cardBackGroundColor && this.form?.get(['globalStyle', 'cardBackGroundColor'])?.value) {
+  //       (this.form.get(['globalStyle', 'cardBackGroundColor']) as FormGroup).setValue(this.globalStyle.cardBackGroundColor);
+  //       this.previousGlobalStyle.cardBackGroundColor = this.globalStyle.cardBackGroundColor;
+  //     }
+  //     if (this.globalStyle?.borderLeftTopRadius && this.globalStyle.borderLeftTopRadius !== this.previousGlobalStyle.borderLeftTopRadius && this.form?.get(['globalStyle', 'borderLeftTopRadius'])?.value) {
+  //       (this.form.get(['globalStyle', 'borderLeftTopRadius']) as FormGroup).setValue(this.globalStyle.borderLeftTopRadius);
+  //       this.previousGlobalStyle.borderLeftTopRadius = this.globalStyle.borderLeftTopRadius;
+  //     }
+  //     if (this.globalStyle?.borderRightTopRadius && this.globalStyle.borderRightTopRadius !== this.previousGlobalStyle.borderRightTopRadius && this.form?.get(['globalStyle', 'borderRightTopRadius'])?.value) {
+  //       (this.form.get(['globalStyle', 'borderRightTopRadius']) as FormGroup).setValue(this.globalStyle.borderRightTopRadius);
+  //       this.previousGlobalStyle.borderRightTopRadius = this.globalStyle.borderRightTopRadius;
+  //     }
+  //     if (this.globalStyle?.borderRightBottomRadius && this.globalStyle.borderRightBottomRadius !== this.previousGlobalStyle.borderRightBottomRadius && this.form?.get(['globalStyle', 'borderRightBottomRadius'])?.value) {
+  //       (this.form.get(['globalStyle', 'borderRightBottomRadius']) as FormGroup).setValue(this.globalStyle.borderRightBottomRadius);
+  //       this.previousGlobalStyle.borderRightBottomRadius = this.globalStyle.borderRightBottomRadius;
+  //     }
+  //     if (this.globalStyle?.borderLeftBottomRadius && this.globalStyle.borderLeftBottomRadius !== this.previousGlobalStyle.borderLeftBottomRadius && this.form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value) {
+  //       (this.form.get(['globalStyle', 'borderLeftBottomRadius']) as FormGroup).setValue(this.globalStyle.borderLeftBottomRadius);
+  //       this.previousGlobalStyle.borderLeftBottomRadius = this.globalStyle.borderLeftBottomRadius;
+  //     }
+  //   }
+  // }
+  initializeEditorButtonEvent(){
+    this.subscriptionObj.add(this.displayFormService.editorButtonEvent.subscribe({
+      next: (res) => {
+        if(res === 'cancel'){
+          this.router.navigate([`/app/formlist`]);
+        }
+        else if(res === 'save'){
+          this.subscriptionObj.add(this.formService.updateForm({ userId: Number(this.commonService.decrypt(this.userId)), formData: this.form?.getRawValue(), formId: this.formId }).subscribe({
+            next: (res) => {
+              if (res) {
+                this.snackBar.open('Form updated successfully', 'okay', {
+                  duration: 2000,
+                  panelClass: ['green-snack-bar']
+                });
+                this.router.navigate(['/app/formlist']);
+              }
+            },
+            error: () => {
+              this.snackBar.open('Failed to update form', 'okay', {
+                duration: 2000,
+                panelClass: ['red-snack-bar']
+              });
+            }
+          }))
+        }
       }
-      if (this.globalStyle?.borderLeftTopRadius && this.globalStyle.borderLeftTopRadius !== this.previousGlobalStyle.borderLeftTopRadius && this.form?.get(['globalStyle', 'borderLeftTopRadius'])?.value) {
-        (this.form.get(['globalStyle', 'borderLeftTopRadius']) as FormGroup).setValue(this.globalStyle.borderLeftTopRadius);
-        this.previousGlobalStyle.borderLeftTopRadius = this.globalStyle.borderLeftTopRadius;
+    }))
+    this.subscriptionObj.add(this.displayFormService.globalEditorEvent.subscribe({
+      next:(res)=>{
+        // this.globalStyle = res;
+        this.form.get('globalStyle')?.patchValue(res);
+        // console.log(this.globalStyle);
       }
-      if (this.globalStyle?.borderRightTopRadius && this.globalStyle.borderRightTopRadius !== this.previousGlobalStyle.borderRightTopRadius && this.form?.get(['globalStyle', 'borderRightTopRadius'])?.value) {
-        (this.form.get(['globalStyle', 'borderRightTopRadius']) as FormGroup).setValue(this.globalStyle.borderRightTopRadius);
-        this.previousGlobalStyle.borderRightTopRadius = this.globalStyle.borderRightTopRadius;
-      }
-      if (this.globalStyle?.borderRightBottomRadius && this.globalStyle.borderRightBottomRadius !== this.previousGlobalStyle.borderRightBottomRadius && this.form?.get(['globalStyle', 'borderRightBottomRadius'])?.value) {
-        (this.form.get(['globalStyle', 'borderRightBottomRadius']) as FormGroup).setValue(this.globalStyle.borderRightBottomRadius);
-        this.previousGlobalStyle.borderRightBottomRadius = this.globalStyle.borderRightBottomRadius;
-      }
-      if (this.globalStyle?.borderLeftBottomRadius && this.globalStyle.borderLeftBottomRadius !== this.previousGlobalStyle.borderLeftBottomRadius && this.form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value) {
-        (this.form.get(['globalStyle', 'borderLeftBottomRadius']) as FormGroup).setValue(this.globalStyle.borderLeftBottomRadius);
-        this.previousGlobalStyle.borderLeftBottomRadius = this.globalStyle.borderLeftBottomRadius;
-      }
-    }
+    }))
+    // this.displayFormService.editorButtonEvent.next(null);
   }
   ngOnDestroy(){
     this.subscriptionObj.unsubscribe();
+    if(this.isFromEditor){
+      this.displayFormService.editorButtonEvent.next(null);
+      this.displayFormService.globalEditorEvent.next(null);
+    }
   }
 }

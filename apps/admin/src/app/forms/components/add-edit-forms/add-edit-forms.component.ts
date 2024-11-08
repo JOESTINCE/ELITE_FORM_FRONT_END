@@ -75,6 +75,13 @@ export class AddEditFormsComponent {
       this.form = new FormGroup({
         title: new UntypedFormControl(formData?.title),
         description: new UntypedFormControl(formData?.description),
+        globalStyle: new FormGroup({
+          cardBackGroundColor: new FormControl(formData?.globalStyle?.cardBackGroundColor ?? 'white'),
+          borderLeftTopRadius: new FormControl(formData?.globalStyle?.borderLeftTopRadius ?? '4'),
+          borderRightTopRadius: new FormControl(formData?.globalStyle?.borderRightTopRadius ?? '4'),
+          borderRightBottomRadius: new FormControl(formData?.globalStyle?.borderRightBottomRadius ?? '4'),
+          borderLeftBottomRadius: new FormControl(formData?.globalStyle?.borderLeftBottomRadius ?? '4'),
+        }),
         items: new FormArray([])
       });
       if(formData?.items?.length){
@@ -85,6 +92,29 @@ export class AddEditFormsComponent {
             answerType: new FormControl(items?.[i]?.answerType),
             isRequired: new FormControl(items?.[i]?.isRequired),
             answer: new FormArray([]),
+            style: new FormGroup({
+              questionFontSize: new FormControl(items?.[i]?.style?.questionFontSize ?? '20'),
+              questionFontFamily: new FormControl(items?.[i]?.style?.questionFontFamily ?? 'Roboto, sans-serif'),
+              questionFontColor: new FormControl(items?.[i]?.style?.questionFontColor ?? 'black'),
+              questionBackGroundColor: new FormControl(items?.[i]?.style?.questionBackGroundColor ?? 'white'),
+              answerFontSize: new FormControl(items?.[i]?.style?.answerFontSize ?? '14'),
+              answerFontFamily: new FormControl(items?.[i]?.style?.answerFontFamily ?? 'Roboto, sans-serif'),
+              answerFontColor: new FormControl(items?.[i]?.style?.answerFontColor ?? 'black'),
+              answerBackGroundColor: new FormControl(items?.[i]?.style?.answerBackGroundColor ?? 'white'),
+              borderLeftWidth: new FormControl(items?.[i]?.style?.borderLeftWidth ?? '5'),
+              borderLeftColor: new FormControl(items?.[i]?.style?.borderLeftColor ?? 'var(--primary-theme-color)'),
+              borderTopWidth: new FormControl(items?.[i]?.style?.borderTopWidth ?? '0'),
+              borderTopColor: new FormControl(items?.[i]?.style?.borderTopColor ?? 'white'),
+              borderRightWidth: new FormControl(items?.[i]?.style?.borderRightWidth ?? '0'),
+              borderRightColor: new FormControl(items?.[i]?.style?.borderRightColor ?? 'white'),
+              borderBottomWidth: new FormControl(items?.[i]?.style?.borderBottomWidth ?? '0'),
+              borderBottomColor: new FormControl(items?.[i]?.style?.borderBottomColor ?? 'white'),
+              cardColor: new FormControl(items?.[i]?.style?.cardColor ?? 'white'),
+              borderLeftTopRadius: new FormControl(items?.[i]?.style?.borderLeftTopRadius ?? '4'),
+              borderRightTopRadius: new FormControl(items?.[i]?.style?.borderRightTopRadius ?? '4'),
+              borderRightBottomRadius: new FormControl(items?.[i]?.style?.borderRightBottomRadius ?? '4'),
+              borderLeftBottomRadius: new FormControl(items?.[i]?.style?.borderLeftBottomRadius ?? '4'),
+            })
           })
           if(items?.[i]?.answer?.length){
             let answer = items?.[i]?.answer;
@@ -107,7 +137,14 @@ export class AddEditFormsComponent {
       this.form = new FormGroup({
         title: new UntypedFormControl(null),
         description: new UntypedFormControl(null),
-        items: new FormArray([])
+        items: new FormArray([]),
+        globalStyle: new FormGroup({
+          cardBackGroundColor: new FormControl('white'),
+          borderLeftTopRadius: new FormControl('4'),
+          borderRightTopRadius: new FormControl('4'),
+          borderRightBottomRadius: new FormControl('4'),
+          borderLeftBottomRadius: new FormControl('4'),
+        }),
       });
     }
     this.settingsForm = new FormGroup({
@@ -122,6 +159,29 @@ export class AddEditFormsComponent {
       answerType: new FormControl(null),
       isRequired: new FormControl(false),
       answer: new FormArray([]),
+      style: new FormGroup({
+        questionFontSize: new FormControl('20'),
+        questionFontFamily: new FormControl('Roboto, sans-serif'),
+        questionFontColor: new FormControl('black'),
+        questionBackGroundColor: new FormControl('white'),
+        answerFontSize: new FormControl('14'),
+        answerFontFamily: new FormControl('Roboto, sans-serif'),
+        answerFontColor: new FormControl('black'),
+        answerBackGroundColor: new FormControl('white'),
+        borderLeftWidth: new FormControl('5'),
+        borderLeftColor: new FormControl('var(--primary-theme-color)'),
+        borderTopWidth: new FormControl('0'),
+        borderTopColor: new FormControl('white'),
+        borderRightWidth: new FormControl('0'),
+        borderRightColor: new FormControl('white'),
+        borderBottomWidth: new FormControl('0'),
+        borderBottomColor: new FormControl('white'),
+        cardColor: new FormControl('white'),
+        borderLeftTopRadius: new FormControl('4'),
+        borderRightTopRadius: new FormControl('4'),
+        borderRightBottomRadius: new FormControl('4'),
+        borderLeftBottomRadius: new FormControl('4'),
+      })
     }))
     console.log((this.form.get('items') as FormArray).value)
   }

@@ -123,6 +123,9 @@ heading: string = 'Form List';
   onFormEdit(id:number){
     this.router.navigate([`/app/addeditform/${id}`]);
   }
+  onOpenEditorClick(id: string){
+    this.router.navigate([`/editor/${id}`]);
+  }
 ngOnDestroy(){
   this.subscriptionObj.unsubscribe();
 }

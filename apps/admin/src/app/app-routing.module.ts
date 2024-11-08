@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'form/:id', component: DisplayFormComponent },
   {path:'signin', component: SignInComponent},
   { path: 'signup', component: SignUpComponent },
-  { path: 'editor', component: FormEditorComponent }
+  { path: 'editor/:id', component: FormEditorComponent }
 
 ];
 

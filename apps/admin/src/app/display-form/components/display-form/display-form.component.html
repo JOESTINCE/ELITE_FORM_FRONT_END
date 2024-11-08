@@ -7,9 +7,9 @@
     'border-bottom-right-radius': form?.get(['globalStyle', 'borderRightBottomRadius'])?.value ?form?.get(['globalStyle', 'borderRightBottomRadius'])?.value+'px' : '4px',
     'border-bottom-left-radius': form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value ?form?.get(['globalStyle', 'borderLeftBottomRadius'])?.value+'px' : '4px',
   }"
-  >
+  > 
     <div #scrollTop></div>
-    <mat-card class="form-header-card">
+    <div class="form-header-card"  [ngStyle]="{'cursor': isFromEditor ? 'pointer': '' }">
       <div class="form-header-div">
         <h1 class="form-header">{{formData?.title}}</h1>
       </div>
@@ -17,7 +17,7 @@
       <div class="form-description-div">
         <h3 class="form-description">{{formData?.description}}</h3>
       </div>
-    </mat-card>
+    </div>
     @if(!isSubmitted && form){
     <form [formGroup]="form" class="form-div">
       <div formArrayName="items" class="form-array-div">
@@ -360,7 +360,7 @@
         }
         @if(editorMenu==='card' && form.get(['items', editorIndex, 'style'])){
         <div class="background-settings-div">
-          <div class="question-font-color-picker-div">
+          <div class="question-font-color-picker-div" style="margin-bottom: 10px;">
             <span class="question-font-color-picker-label">
               Card color
             </span>
@@ -369,24 +369,82 @@
               [style.background]="form.get(['items', editorIndex, 'style', 'cardColor']).value">
             </div>
           </div>
-          <mat-form-field appearance="outline" style="margin-top: 10px;"> 
+          <!-- <mat-form-field appearance="outline" style="margin-top: 10px;"> 
             <mat-label>Left-Top border radius</mat-label>
             <input matInput placeholder="Ex. 10" type="number"
               [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftTopRadius'])">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Left-Top Border Radius
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderLeftTopRadius']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftTopRadius'])" #slider>
+            </mat-slider>
+          </div>
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Right-Top border radius</mat-label>
             <input matInput placeholder="Ex. 10" type="number"
               [formControl]="form.get(['items', editorIndex, 'style', 'borderRightTopRadius'])">
-          </mat-form-field><mat-form-field appearance="outline">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Right-Top Border Radius
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderRightTopRadius']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderRightTopRadius'])" #slider>
+            </mat-slider>
+          </div>
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Right-Bottom border radius</mat-label>
             <input matInput placeholder="Ex. 10" type="number"
               [formControl]="form.get(['items', editorIndex, 'style', 'borderRightBottomRadius'])">
-          </mat-form-field><mat-form-field appearance="outline">
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Right-Bottom Border Radius
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderRightBottomRadius']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderRightBottomRadius'])" #slider>
+            </mat-slider>
+          </div>
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Left-Bottom border radius</mat-label>
             <input matInput placeholder="Ex. 10" type="number"
               [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftBottomRadius'])">
-          </mat-form-field>
+          </mat-form-field> -->
+          <div class="slider-parent-div">
+            <div class="slider-info-div">
+              <span class="slider-label-span">
+                Left-Bottom Border Radius
+              </span>
+              <span class="slider-value-span">
+                {{form.get(['items', editorIndex, 'style', 'borderLeftBottomRadius']).value+'px'}}
+              </span>
+            </div>
+            <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
+              [showTickMarks]="false">
+              <input matSliderThumb [formControl]="form.get(['items', editorIndex, 'style', 'borderLeftBottomRadius'])" #slider>
+            </mat-slider>
+          </div>
         </div>
         }
       </div>

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpRoutingService } from '../../common-components/services/http-routing.service';
 import { API } from '../../common-components/constants/api-routes';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DisplayFormService {
-
+  editorButtonEvent = new BehaviorSubject<any>(null);
+  globalEditorEvent = new BehaviorSubject<any>(null);
   constructor(
     private httpRoutingService: HttpRoutingService
   ) { }

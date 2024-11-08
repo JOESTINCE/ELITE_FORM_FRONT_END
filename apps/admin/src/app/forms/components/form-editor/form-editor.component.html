@@ -1,11 +1,24 @@
 <mat-card class="top-tool-bar">
-  Top Tool Bar
-  <hr style="width: 70%;">
-  click on any card to start editing!
+  <div class="top-tool-bar-first-half">
+  <div class="div-one">
+    <mat-icon matTooltip="Preview" style="cursor: pointer;" (click)="onButtonClick('preview')">open_in_new</mat-icon>
+  </div>
+  <div class="div-two">
+    <h1 style="margin: 0px;font-size: 35px;">Form Editor</h1>
+    <hr style="width: 60%;color: var(--primary-theme-color)">
+    <h4 style="margin: 0px;height: 30%;">click on any card to start editing!</h4>
+  </div>
+  <div class="div-three">
+    <button mat-flat-button class="cancel-button" (click)="onButtonClick('cancel')">cancel</button>
+    <button mat-flat-button class="save-button" (click)="onButtonClick('save')">Save</button>
+  </div>
+  </div>
+ 
 </mat-card>
 <div class="preview-parent-div">
   <mat-card class="controls-div">
-    <mat-icon (click)="onGlobalEditorClick()">invert_colors</mat-icon>
+    <mat-icon style="cursor: pointer;" (click)="onGlobalEditorClick()">invert_colors</mat-icon>
+    <mat-icon style="cursor: pointer;">font_download</mat-icon>
   </mat-card>
   <div class="global-editor-div"
     [ngClass]="viewGlobalEditor ? 'slide-right-global-editor' : globalEditorFlag ? 'slide-left-global-editor': ''">
@@ -20,7 +33,7 @@
         <span class="card-background-color-picker-label">
           Card color
         </span>
-        <div class="card-background-color-picker-input" [(colorPicker)]="style.cardBackGroundColor"
+        <div class="card-background-color-picker-input" [(colorPicker)]="style.cardBackGroundColor" (colorPickerChange)="onGlobalEditorChange()"
           [style.background]="style.cardBackGroundColor">
         </div>
       </div>
@@ -35,7 +48,7 @@
         </div>
         <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
           [showTickMarks]="false">
-          <input matSliderThumb [(ngModel)]="style.borderLeftTopRadius" #slider>
+          <input matSliderThumb [(ngModel)]="style.borderLeftTopRadius" (change)="onGlobalEditorChange()" #slider>
         </mat-slider>
       </div>
       <div class="slider-parent-div">
@@ -49,7 +62,7 @@
         </div>
         <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
           [showTickMarks]="false">
-          <input matSliderThumb [(ngModel)]="style.borderRightTopRadius" #slider>
+          <input matSliderThumb [(ngModel)]="style.borderRightTopRadius" (change)="onGlobalEditorChange()" #slider>
         </mat-slider>
       </div>
       <div class="slider-parent-div">
@@ -63,7 +76,7 @@
         </div>
         <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
           [showTickMarks]="false">
-          <input matSliderThumb [(ngModel)]="style.borderRightBottomRadius" #slider>
+          <input matSliderThumb [(ngModel)]="style.borderRightBottomRadius" (change)="onGlobalEditorChange()" #slider>
         </mat-slider>
       </div>
         <div class="slider-parent-div">
@@ -77,11 +90,10 @@
           </div>
           <mat-slider class="slider-div" [disabled]="false" [max]="200" [min]="0" [step]="1" [discrete]="false"
             [showTickMarks]="false">
-            <input matSliderThumb [(ngModel)]="style.borderLeftBottomRadius" #slider>
+            <input matSliderThumb [(ngModel)]="style.borderLeftBottomRadius" (change)="onGlobalEditorChange()" #slider>
           </mat-slider>
         </div>
     </div>
   </div>
-  <app-display-form class="preview" [formId]="'66f7d33637f3dd688e82b40c'" [isFromEditor]="true"
-    [globalStyle]="style"></app-display-form>
+  <app-display-form class="preview" [formId]="formId" [isFromEditor]="true" (globalStyleInitialization)="globalStyleInitialization($event)"></app-display-form>
 </div>
